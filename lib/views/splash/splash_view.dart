@@ -5,6 +5,17 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold();
+    return Scaffold(
+      backgroundColor: Theme.of(context).primaryColor,
+      body: Center(
+        child: Text(
+          'a a m i',
+          style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                fontSize: 25,
+                color: Colors.white,
+              ),
+        ),
+      ),
+    );
   }
 }

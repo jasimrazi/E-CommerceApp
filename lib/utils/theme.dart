@@ -12,10 +12,6 @@ class AppColors {
   static const darkBackground = Color(0xFF1B262C);
   static const darkSurface = Color(0xFF222E34);
   static const darkOnPrimary = Color(0xFFF5F8FB);
-
-  //Appbar IconBackground Colors
-  static const lightIconBackground = Color(0xFFE0E0E0); 
-  static const darkIconBackground = Color(0xFF2C2C2C); 
 }
 
 class AppTextStyles {
@@ -23,7 +19,7 @@ class AppTextStyles {
     fontFamily: 'Inter',
     fontWeight: FontWeight.w400, // Regular
     fontSize: 16,
-    color: Color(0xff1D1E20),
+    color: AppColors.secondaryColor,
   );
 
   static const TextStyle bodyMedium = TextStyle(
@@ -48,7 +44,7 @@ ThemeData lightTheme = ThemeData(
   appBarTheme: AppBarTheme(
     backgroundColor: Colors.transparent,
     elevation: 0,
-    iconTheme: const IconThemeData(color: AppColors.lightOnPrimary),
+    iconTheme: const IconThemeData(color: AppColors.darkSurface),
     titleTextStyle: AppTextStyles.bodySemiBold.copyWith(
       color: AppColors.primaryColor,
       fontSize: 20,
@@ -82,7 +78,7 @@ ThemeData darkTheme = ThemeData(
     ),
   ),
   textTheme: TextTheme(
-    bodySmall: AppTextStyles.bodyRegular.copyWith(color: Color(0xffF5F8FB)),
+    bodySmall: AppTextStyles.bodyRegular.copyWith(color: AppColors.secondaryColor),
     bodyMedium: AppTextStyles.bodyMedium.copyWith(color: Color(0xffF5F8FB)),
     bodyLarge: AppTextStyles.bodySemiBold.copyWith(color: Color(0xffF5F8FB)),
   ),
@@ -92,6 +88,5 @@ ThemeData darkTheme = ThemeData(
     secondary: AppColors.secondaryColor,
     surface: AppColors.darkSurface,
     onSurface: Colors.white,
-    
   ).copyWith(surface: AppColors.darkBackground),
 );
