@@ -1,3 +1,4 @@
+import 'package:aami/views/auth/signup_page.dart';
 import 'package:aami/widgets/appbar.dart';
 import 'package:aami/widgets/bottomnavbutton.dart';
 import 'package:aami/widgets/texfield.dart';
@@ -63,12 +64,21 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
               Spacer(),
-              Text(
-                'By connecting your account confirm that you agree with our Term and Condition',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                      fontSize: 13.sp,
-                    ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SignupPage(),
+                      ));
+                },
+                child: Text(
+                  'Already have an account? Signin',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                        fontSize: 13.sp,
+                      ),
+                ),
               ),
             ],
           ),
