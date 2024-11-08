@@ -9,7 +9,11 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppbar(),
+      appBar: CustomAppbar(
+        actions: [
+          IconButton(onPressed: () {}, icon: Icon(Icons.shopping_bag_outlined))
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
@@ -24,7 +28,7 @@ class HomePage extends StatelessWidget {
             ),
             Text('Welcome to Aami',
                 style: Theme.of(context).textTheme.bodySmall!),
-            CustomSearchBar()
+            CustomSearchBar(),
           ],
         ),
       ),

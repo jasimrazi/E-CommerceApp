@@ -1,5 +1,6 @@
 import 'package:aami/utils/theme.dart';
 import 'package:aami/views/auth/login_page.dart';
+import 'package:aami/views/home/bottom_navbar.dart';
 import 'package:aami/views/home/home_page.dart';
 import 'package:aami/views/splash/splash_view.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +31,7 @@ class MainApp extends StatelessWidget {
           home: child,
         );
       },
-      child: HomePage(),
+      child: BottomNavBarPage(),
     );
   }
 }
