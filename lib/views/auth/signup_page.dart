@@ -1,6 +1,7 @@
 import 'package:aami/widgets/appbar.dart';
 import 'package:aami/widgets/bottomnavbutton.dart';
 import 'package:aami/widgets/texfield.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -49,6 +50,25 @@ class SignupPage extends StatelessWidget {
               ),
               SizedBox(
                 height: 15.h,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Remember me',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall!
+                        .copyWith(color: Color(0xff1D1E20), fontSize: 13.sp),
+                  ),
+                  Transform.scale(
+                    scale: 0.7,
+                    child: CupertinoSwitch(
+                        value: true,
+                        onChanged: (value) {},
+                        activeColor: CupertinoColors.activeGreen),
+                  )
+                ],
               ),
               Spacer(),
               Text(

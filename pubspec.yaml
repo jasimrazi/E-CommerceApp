@@ -22,9 +22,9 @@ flutter:
   fonts:
     - family: Inter
       fonts:
-        - asset: static/Inter_18pt-Regular.ttf
+        - asset: assets/fonts/Inter_18pt-Regular.ttf
           weight: 400
-        - asset: static/Inter_18pt-Medium.ttf
+        - asset: assets/fonts/Inter_18pt-Medium.ttf
           weight: 500
-        - asset: static/Inter_18pt-SemiBold.ttf
+        - asset: assets/fonts/Inter_18pt-SemiBold.ttf
           weight: 600

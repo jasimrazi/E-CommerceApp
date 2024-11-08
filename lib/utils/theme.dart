@@ -6,7 +6,7 @@ class AppColors {
   static const secondaryColor = Color(0xFF8F959E);
 
   static const lightBackground = Color(0xFFFFFFFF);
-  static const lightSurface = Color(0xFFF5F6FA);
+  static const lightSurface = Color(0xFFF5F5F5);
   static const lightOnPrimary = Color(0xFFFEFEFE);
 
   static const darkBackground = Color(0xFF1B262C);
@@ -61,7 +61,7 @@ ThemeData lightTheme = ThemeData(
     secondary: AppColors.secondaryColor,
     surface: AppColors.lightSurface,
     onSurface: Colors.black,
-  ).copyWith(surface: AppColors.lightBackground),
+  ).copyWith(surface: AppColors.lightSurface),
 );
 
 ThemeData darkTheme = ThemeData(
@@ -88,5 +88,5 @@ ThemeData darkTheme = ThemeData(
     secondary: AppColors.secondaryColor,
     surface: AppColors.darkSurface,
     onSurface: Colors.white,
-  ).copyWith(surface: AppColors.darkBackground),
+  ).copyWith(surface: AppColors.darkSurface),
 );
