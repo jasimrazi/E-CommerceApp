@@ -50,67 +50,65 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppbar(
-        actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.shopping_bag_outlined))
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Hello',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge!
-                    .copyWith(fontSize: 28.sp),
-              ),
-              Text('Welcome to Aami',
-                  style: Theme.of(context).textTheme.bodySmall!),
-              CustomSearchBar(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'New Arrivals',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                  Text(
-                    'View All',
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                ],
-              ),
-              SizedBox(height: 20.h), // Add some spacing
-
-              // Use GridView.builder with itemCount limited to 4
-              GridView.builder(
-                padding: EdgeInsets.zero,
-                shrinkWrap: true, // Ensures it takes only the necessary height
-                physics:
-                    NeverScrollableScrollPhysics(), // Disable GridView scrolling
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, // Two columns
-                  childAspectRatio: 0.65, // Adjust ratio as needed
-                  crossAxisSpacing: 15,
-                  mainAxisSpacing: 20,
+    return SafeArea(
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Hello',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge!
+                      .copyWith(fontSize: 28.sp),
                 ),
-                itemCount: 4, // Display only 4 items
-                itemBuilder: (context, index) {
-                  final product = products[index];
-                  return ProductCard(
-                    title: product['title'],
-                    price: product['price'],
-                    image: product['image'],
-                  );
-                },
-              ),
-            ],
+                Text('Welcome to Aami',
+                    style: Theme.of(context).textTheme.bodySmall!),
+                CustomSearchBar(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'New Arrivals',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    Text(
+                      'View All',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20.h), // Add some spacing
+
+                // Use GridView.builder with itemCount limited to 4
+                GridView.builder(
+                  padding: EdgeInsets.zero,
+                  shrinkWrap:
+                      true, // Ensures it takes only the necessary height
+                  physics:
+                      NeverScrollableScrollPhysics(), // Disable GridView scrolling
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2, // Two columns
+                    childAspectRatio: 0.65, // Adjust ratio as needed
+                    crossAxisSpacing: 15,
+                    mainAxisSpacing: 20,
+                  ),
+                  itemCount: 4, // Display only 4 items
+                  itemBuilder: (context, index) {
+                    final product = products[index];
+                    return ProductCard(
+                      title: product['title'],
+                      price: product['price'],
+                      image: product['image'],
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
