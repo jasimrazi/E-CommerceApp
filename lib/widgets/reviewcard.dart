@@ -17,6 +17,9 @@ class ReviewCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        SizedBox(
+          height: 20.h,
+        ),
         Row(
           children: [
             CircleAvatar(
@@ -80,8 +83,8 @@ class ReviewCard extends StatelessWidget {
           trimMode: TrimMode.Line,
           trimLines: 2,
           colorClickableText: Theme.of(context).colorScheme.primary,
-          trimCollapsedText: 'Show more',
-          trimExpandedText: 'Show less',
+          trimCollapsedText: ' Show more',
+          trimExpandedText: ' Show less',
           style: TextStyle(
               color: Theme.of(context)
                   .colorScheme

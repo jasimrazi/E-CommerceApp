@@ -2,17 +2,16 @@ import 'package:flutter/material.dart';
 
 class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
   final bool isCart;
+  final String? title; // Optional title parameter
 
-  // Constructor to allow customization based on condition
   const CustomAppbar({
     Key? key,
     this.isCart = false,
+    this.title,
   }) : super(key: key);
 
-  // Implement the preferredSize property required by PreferredSizeWidget
   @override
-  Size get preferredSize =>
-      const Size.fromHeight(kToolbarHeight); // Default app bar height
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
   @override
   Widget build(BuildContext context) {
@@ -29,15 +28,23 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: IconButton(
-                  onPressed: () {
-                    if (Navigator.canPop(context)) {
-                      Navigator.pop(context);
-                    }
-                  },
-                  icon: Icon(Icons.arrow_back)),
+                onPressed: () {
+                  if (Navigator.canPop(context)) {
+                    Navigator.pop(context);
+                  }
+                },
+                icon: Icon(Icons.arrow_back),
+              ),
             ),
           ),
         ),
+        title: title != null
+            ? Text(
+                title!,
+                style: Theme.of(context).textTheme.bodyLarge,
+              )
+            : null,
+        centerTitle: true, // Center the title
         actions: isCart
             ? [
                 Transform.scale(
@@ -60,6 +67,9 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
                 ),
               ]
             : [],
+        backgroundColor:
+            Colors.transparent, // Make the app bar background transparent
+        elevation: 0, // Remove the shadow
       ),
     );
   }

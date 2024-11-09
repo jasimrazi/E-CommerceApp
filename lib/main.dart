@@ -3,6 +3,8 @@ import 'package:aami/views/auth/login_page.dart';
 import 'package:aami/views/home/bottom_navbar.dart';
 import 'package:aami/views/home/home_page.dart';
 import 'package:aami/views/product/single_product.dart';
+import 'package:aami/views/review/addreview_page.dart';
+import 'package:aami/views/review/allreview_page.dart';
 import 'package:aami/views/splash/splash_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -32,7 +34,7 @@ class MainApp extends StatelessWidget {
           home: child,
         );
       },
-      child: SingleProduct(),
+      child: AddReviewPage(),
     );
   }
 }
