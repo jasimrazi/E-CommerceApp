@@ -34,7 +34,7 @@ class MainApp extends StatelessWidget {
           home: child,
         );
       },
-      child: AddReviewPage(),
+      child: BottomNavBarPage(),
     );
   }
 }

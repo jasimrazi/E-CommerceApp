@@ -1,8 +1,8 @@
 import 'package:aami/widgets/appbar.dart';
 import 'package:aami/widgets/bottomnavbutton.dart';
-import 'package:aami/widgets/imagecard.dart';
-import 'package:aami/widgets/reviewcard.dart';
-import 'package:aami/widgets/sizecard.dart';
+import 'package:aami/widgets/cards/imagecard.dart';
+import 'package:aami/widgets/cards/reviewcard.dart';
+import 'package:aami/widgets/cards/sizecard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

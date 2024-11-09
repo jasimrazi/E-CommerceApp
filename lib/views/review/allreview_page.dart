@@ -1,5 +1,5 @@
 import 'package:aami/widgets/appbar.dart';
-import 'package:aami/widgets/reviewcard.dart';
+import 'package:aami/widgets/cards/reviewcard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
