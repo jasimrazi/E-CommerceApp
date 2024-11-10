@@ -32,7 +32,7 @@ class AppTextStyles {
   static const TextStyle bodySemiBold = TextStyle(
     fontFamily: 'Inter',
     fontWeight: FontWeight.w600, // SemiBold
-    fontSize: 20,
+    fontSize: 18,
     color: Color(0xff1D1E20),
   );
 }
