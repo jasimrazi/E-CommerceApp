@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProductCard extends StatelessWidget {
   final String title;
-  final double price;
+  final String price;
   final String image;
 
   const ProductCard({
@@ -68,7 +68,7 @@ class ProductCard extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
           Spacer(),
-          Text('\$${price.toStringAsFixed(2)}',
+          Text('\$$price',
               style: Theme.of(context)
                   .textTheme
                   .bodyLarge!
