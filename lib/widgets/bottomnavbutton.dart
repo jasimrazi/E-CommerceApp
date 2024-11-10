@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -23,7 +24,7 @@ class CustomBottomNavButton extends StatelessWidget {
         height: 75.h,
         color: Theme.of(context).colorScheme.primary,
         child: isLoading
-            ? const CircularProgressIndicator(
+            ? const CupertinoActivityIndicator(
                 color: Color(0xffFEFEFE), // Spinner color
               )
             : Text(

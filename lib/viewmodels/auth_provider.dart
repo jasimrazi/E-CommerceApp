@@ -73,13 +73,10 @@ class AuthProvider extends ChangeNotifier {
   }
 
   // Signup method with error handling and rethrow
-  Future<void> signup(String email, String password, String username) async {
+  Future<void> signup(String email, String password, String name, String number) async {
     setLoading(true); // Start loading
     try {
-      final response = await authService.signup(email, password, username);
-      loginId = response['loginid'];
-      name = response['name'];
-      await _saveUserData(loginId!, name!);
+      await authService.signup(email, password, name, number);
     } catch (error) {
       print('Signup error: $error');
       rethrow; // Pass the error to UI layer
@@ -95,6 +92,8 @@ class AuthProvider extends ChangeNotifier {
       loginId = null;
       name = null;
       await _clearUserData();
+    } catch (e) {
+      rethrow;
     } finally {
       setLoading(false); // Stop loading
     }

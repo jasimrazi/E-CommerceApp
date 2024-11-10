@@ -1,15 +1,25 @@
+import 'package:aami/viewmodels/auth_provider.dart';
+import 'package:aami/views/auth/login_page.dart';
 import 'package:aami/widgets/appbar.dart';
 import 'package:aami/widgets/bottomnavbutton.dart';
 import 'package:aami/widgets/texfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 class SignupPage extends StatelessWidget {
-  const SignupPage({super.key});
+   SignupPage({super.key});
+
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController numberController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    
+
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -35,17 +45,21 @@ class SignupPage extends StatelessWidget {
                 ),
               ),
               CustomTextField(
-                labelText: 'Username',
+                labelText: 'Name',
+                controller: nameController,
               ),
               CustomTextField(
                 labelText: 'Email',
+                controller: emailController,
                 keyboardType: TextInputType.emailAddress,
               ),
               CustomTextField(
+                controller: numberController,
                 labelText: 'Phone Number',
                 keyboardType: TextInputType.phone,
               ),
               CustomTextField(
+                controller: passwordController,
                 labelText: 'Password',
               ),
               SizedBox(
@@ -81,10 +95,37 @@ class SignupPage extends StatelessWidget {
             ],
           ),
         ),
-        bottomNavigationBar: CustomBottomNavButton(
-          onTap: () {},
-          title: 'Sign Up',
-        ),
+        bottomNavigationBar:
+            Consumer<AuthProvider>(builder: (context, authProvider, child) {
+          return CustomBottomNavButton(
+            onTap: () async {
+              final authProvider =
+                  Provider.of<AuthProvider>(context, listen: false);
+
+              try {
+                await authProvider.signup(
+                    emailController.text,
+                    passwordController.text,
+                    nameController.text,
+                    numberController.text);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Account Registered Successfully')),
+                );
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => LoginPage(),
+                    ));
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(e.toString())),
+                );
+              }
+            },
+            title: 'Sign Up',
+            isLoading: authProvider.loading,
+          );
+        }),
       ),
     );
   }

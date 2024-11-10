@@ -10,18 +10,19 @@ import 'package:provider/provider.dart';
 import 'package:aami/views/home/bottom_navbar.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+   LoginPage({super.key});
+
+  // Create text controllers for username and password fields
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    // Create text controllers for username and password fields
-    final TextEditingController usernameController = TextEditingController();
-    final TextEditingController passwordController = TextEditingController();
+    
 
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: CustomAppbar(),
         body: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
@@ -31,6 +32,9 @@ class LoginPage extends StatelessWidget {
                   margin: EdgeInsets.only(bottom: 200.h),
                   child: Column(
                     children: [
+                      SizedBox(
+                        height: 30.h,
+                      ),
                       Text(
                         'Welcome',
                         style: Theme.of(context)
@@ -50,8 +54,8 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
               CustomTextField(
-                labelText: 'Username',
-                controller: usernameController,
+                labelText: 'Email',
+                controller: emailController,
               ),
               CustomTextField(
                 labelText: 'Password',
@@ -129,33 +133,30 @@ class LoginPage extends StatelessWidget {
             ],
           ),
         ),
-        bottomNavigationBar: CustomBottomNavButton(
-          // LoginPage bottom navigation button handler
-          onTap: () async {
-            final authProvider =
-                Provider.of<AuthProvider>(context, listen: false);
+        bottomNavigationBar: Consumer<AuthProvider>(
+          builder: (context, authProvider, _) => CustomBottomNavButton(
+            onTap: () async {
+              final authProvider =
+                  Provider.of<AuthProvider>(context, listen: false);
 
-            try {
-              print(usernameController.text);
-              print(passwordController.text);
-              await authProvider.login(
-                usernameController.text,
-                passwordController.text,
-              );
-              // Navigate to the home page if login is successful
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => BottomNavBarPage()),
-              );
-            } catch (e) {
-              // Display the error message in a SnackBar
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(e.toString())),
-              );
-            }
-          },
-
-          title: 'Login',
+              try {
+                await authProvider.login(
+                  emailController.text,
+                  passwordController.text,
+                );
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => BottomNavBarPage()),
+                );
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(e.toString())),
+                );
+              }
+            },
+            title: 'Login',
+            isLoading: authProvider.loading, // Pass loading state
+          ),
         ),
       ),
     );

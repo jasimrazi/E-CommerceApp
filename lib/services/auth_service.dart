@@ -28,17 +28,19 @@ class AuthService {
   }
 
   Future<Map<String, dynamic>> signup(
-      String email, String password, String username) async {
+      String email, String password, String name, String number) async {
     try {
-      final url = Uri.parse('$baseUrl/user/signup');
+      final url = Uri.parse('$baseUrl/user/register/user');
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
         body: json.encode(
-            {'email': email, 'password': password, 'username': username}),
+            {'email': email, 'password': password, 'name': name, 'number': number}),
       );
 
-      if (response.statusCode == 201) {
+      print(response.body);
+
+      if (response.statusCode == 200) {
         return json.decode(response.body);
       } else {
         final Map<String, dynamic> errorData = json.decode(response.body);
