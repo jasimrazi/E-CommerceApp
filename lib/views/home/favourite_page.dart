@@ -44,9 +44,6 @@ class FavouritePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppbar(
-        title: 'Favourite',
-      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
@@ -56,13 +53,14 @@ class FavouritePage extends StatelessWidget {
             ),
             Expanded(
               child: GridView.builder(
+                shrinkWrap: true,
                 physics: BouncingScrollPhysics(),
                 itemCount: favouriteData.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2, // Number of columns in the grid
-                  childAspectRatio: 0.65, // Adjust aspect ratio as needed
-                  mainAxisSpacing: 8.0,
-                  crossAxisSpacing: 8.0,
+                  childAspectRatio: 0.63, // Adjust aspect ratio as needed
+                  mainAxisSpacing: 15,
+                  crossAxisSpacing: 20,
                 ),
                 itemBuilder: (context, index) {
                   final product = favouriteData[index]['product'];

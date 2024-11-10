@@ -3,6 +3,7 @@ import 'package:aami/views/auth/login_page.dart';
 import 'package:aami/views/home/address_page.dart';
 import 'package:aami/views/home/bottom_navbar.dart';
 import 'package:aami/views/home/home_page.dart';
+import 'package:aami/views/product/all_product.dart';
 import 'package:aami/views/product/single_product.dart';
 import 'package:aami/views/review/addreview_page.dart';
 import 'package:aami/views/review/allreview_page.dart';
@@ -35,7 +36,7 @@ class MainApp extends StatelessWidget {
           home: child,
         );
       },
-      child: BottomNavBarPage(),
+      child: AllProduct(),
     );
   }
 }
