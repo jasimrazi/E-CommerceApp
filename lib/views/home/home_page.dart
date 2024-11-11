@@ -1,6 +1,6 @@
 import 'package:aami/viewmodels/product_provider.dart';
+import 'package:aami/views/product/all_product.dart';
 import 'package:aami/views/product/single_product.dart';
-import 'package:aami/widgets/appbar.dart';
 import 'package:aami/widgets/cards/productcard.dart';
 import 'package:aami/widgets/loadinganimation.dart';
 import 'package:aami/widgets/searchbar.dart';
@@ -31,49 +31,60 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Consumer<ProductProvider>(
-            builder: (context, productProvider, child) {
-              return SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Hello',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge!
+                      .copyWith(fontSize: 28.sp),
+                ),
+                Text('Welcome to Aami',
+                    style: Theme.of(context).textTheme.bodySmall!),
+                CustomSearchBar(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Hello',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyLarge!
-                          .copyWith(fontSize: 28.sp),
+                      'New Arrivals',
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
-                    Text('Welcome to Aami',
-                        style: Theme.of(context).textTheme.bodySmall!),
-                    CustomSearchBar(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'New Arrivals',
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                        Text(
-                          'View All',
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                      ],
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AllProduct(),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        'View All',
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
                     ),
-                    SizedBox(height: 20.h),
+                  ],
+                ),
+                SizedBox(height: 20.h),
+                // Wrap only GridView with Consumer
+                Consumer<ProductProvider>(
+                  builder: (context, productProvider, child) {
                     // Display a loading indicator while loading, or a message if products are empty
-                    if (productProvider.isLoading)
-                      Center(child: CustomLoading())
-                    else if (productProvider.products.isEmpty)
-                      Center(
+                    if (productProvider.isLoading) {
+                      return Center(child: CustomLoading());
+                    } else if (productProvider.products.isEmpty) {
+                      return Center(
                         child: Text(
                           'No products available',
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
-                      )
-                    else
-                      GridView.builder(
+                      );
+                    } else {
+                      return GridView.builder(
                         padding: EdgeInsets.zero,
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
@@ -90,7 +101,6 @@ class _HomePageState extends State<HomePage> {
                           return GestureDetector(
                             onTap: () {
                               print('HomePage: ProductID: ${product.id}');
-
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -108,14 +118,16 @@ class _HomePageState extends State<HomePage> {
                             ),
                           );
                         },
-                      ),
-                  ],
+                      );
+                    }
+                  },
                 ),
-              );
-            },
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 }
+

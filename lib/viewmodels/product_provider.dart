@@ -9,6 +9,9 @@ class ProductProvider with ChangeNotifier {
   bool isLoading = false;
 
   Future<void> fetchProducts() async {
+    // Check if products are already cached
+    if (products.isNotEmpty) return; // Return immediately if data is cached
+
     isLoading = true;
     notifyListeners();
 
@@ -23,6 +26,9 @@ class ProductProvider with ChangeNotifier {
   }
 
   Future<void> fetchSingleProduct(int productID) async {
+    // If the product is already cached, no need to call the API
+    if (product != null && product!.id == productID) return;
+
     isLoading = true;
     notifyListeners();
 
@@ -31,8 +37,7 @@ class ProductProvider with ChangeNotifier {
 
       if (response != null && response.isNotEmpty) {
         // Parse the single product data
-        product = Product.fromJson(
-            response); // Assuming the API returns a single product object
+        product = Product.fromJson(response);
 
         if (product == null) {
           print("Product is null after fetchSingleProduct.");
