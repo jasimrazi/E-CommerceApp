@@ -9,17 +9,19 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 class SignupPage extends StatelessWidget {
-   SignupPage({super.key});
+  SignupPage({super.key});
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController numberController = TextEditingController();
 
+  Future<void> delayTwoSeconds() async {
+    await Future.delayed(const Duration(seconds: 2));
+  }
+
   @override
   Widget build(BuildContext context) {
-    
-
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -108,9 +110,12 @@ class SignupPage extends StatelessWidget {
                     passwordController.text,
                     nameController.text,
                     numberController.text);
+
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('Account Registered Successfully')),
                 );
+                await delayTwoSeconds();
+
                 Navigator.push(
                     context,
                     MaterialPageRoute(

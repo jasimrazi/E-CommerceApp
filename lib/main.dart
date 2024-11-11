@@ -1,5 +1,6 @@
 import 'package:aami/utils/theme.dart';
 import 'package:aami/viewmodels/auth_provider.dart';
+import 'package:aami/viewmodels/product_provider.dart';
 import 'package:aami/views/auth/login_page.dart';
 import 'package:aami/views/home/bottom_navbar.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,9 @@ class MainApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (_) => AuthProvider(),
+        ), // Providing AuthProvider
+        ChangeNotifierProvider(
+          create: (_) => ProductProvider(),
         ), // Providing AuthProvider
       ],
       child: ScreenUtilInit(

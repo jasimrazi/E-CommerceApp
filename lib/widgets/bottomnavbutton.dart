@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class CustomBottomNavButton extends StatelessWidget {
   final VoidCallback onTap;
@@ -24,8 +25,16 @@ class CustomBottomNavButton extends StatelessWidget {
         height: 75.h,
         color: Theme.of(context).colorScheme.primary,
         child: isLoading
-            ? const CupertinoActivityIndicator(
-                color: Color(0xffFEFEFE), // Spinner color
+            ? Column(
+                children: [
+                  SpinKitThreeBounce(
+                    color: Colors.white,
+                    size: 25.0,
+                  ),
+                  SizedBox(
+                    height: 10.h,
+                  )
+                ],
               )
             : Text(
                 title,
