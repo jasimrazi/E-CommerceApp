@@ -1,5 +1,6 @@
 import 'package:aami/viewmodels/auth_provider.dart';
 import 'package:aami/views/auth/login_page.dart';
+import 'package:aami/views/home/bottom_navbar.dart';
 import 'package:aami/widgets/appbar.dart';
 import 'package:aami/widgets/bottomnavbutton.dart';
 import 'package:aami/widgets/texfield.dart';
@@ -16,9 +17,7 @@ class SignupPage extends StatelessWidget {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController numberController = TextEditingController();
 
-  Future<void> delayTwoSeconds() async {
-    await Future.delayed(const Duration(seconds: 2));
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -111,15 +110,12 @@ class SignupPage extends StatelessWidget {
                     nameController.text,
                     numberController.text);
 
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Account Registered Successfully')),
-                );
-                await delayTwoSeconds();
+                
 
-                Navigator.push(
+                Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => LoginPage(),
+                      builder: (context) => BottomNavBarPage(),
                     ));
               } catch (e) {
                 ScaffoldMessenger.of(context).showSnackBar(

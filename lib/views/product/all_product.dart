@@ -6,21 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
-class AllProduct extends StatefulWidget {
+class AllProduct extends StatelessWidget {
   AllProduct({super.key});
 
   @override
-  _AllProductState createState() => _AllProductState();
-}
-
-class _AllProductState extends State<AllProduct> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<ProductProvider>(context, listen: false).fetchProducts();
-    });
-  }
+  
 
   @override
   Widget build(BuildContext context) {

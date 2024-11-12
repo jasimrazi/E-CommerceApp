@@ -76,7 +76,10 @@ class AuthProvider extends ChangeNotifier {
   Future<void> signup(String email, String password, String name, String number) async {
     setLoading(true); // Start loading
     try {
-      await authService.signup(email, password, name, number);
+      final response = await authService.signup(email, password, name, number);
+      loginId = response['data']['loginid'];
+      name = response['data']['name'];
+      await _saveUserData(loginId!, name!);
     } catch (error) {
       print('Signup error: $error');
       rethrow; // Pass the error to UI layer
