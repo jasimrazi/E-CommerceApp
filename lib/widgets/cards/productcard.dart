@@ -69,7 +69,9 @@ class ProductCard extends StatelessWidget {
                   onPressed: () {
                     // Toggle favorite status on button press
                     favouriteProvider.toggleFavourite(
-                        loginID, productId);
+                      loginID,
+                      productId,
+                    );
                   },
                 ),
               ),

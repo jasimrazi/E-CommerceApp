@@ -1,6 +1,7 @@
 import 'package:aami/models/product_model.dart';
 import 'package:aami/services/favourite_service.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FavouriteProvider with ChangeNotifier {
   final FavouriteService favouritesService = FavouriteService();
@@ -8,6 +9,10 @@ class FavouriteProvider with ChangeNotifier {
   List<Product> favouriteProducts =
       []; // Holds full product data for favourites
   bool isLoading = false;
+
+  FavouriteProvider() {
+    _loadFavouriteProductIds(); // Load saved favourite product IDs on initialization
+  }
 
   // Toggles the favourite status of a product
   Future<void> toggleFavourite(String loginid, int productid) async {
@@ -24,6 +29,7 @@ class FavouriteProvider with ChangeNotifier {
       } else if (message == "Product removed from favourites") {
         favouriteProductIds.remove(productid);
       }
+      await _saveFavouriteProductIds(); // Save updated favourite IDs to SharedPreferences
     } catch (e) {
       print("Error toggling favourite: $e");
     } finally {
@@ -35,19 +41,15 @@ class FavouriteProvider with ChangeNotifier {
   // Fetch all favourite products for the user
   Future<void> fetchFavouriteProducts(String loginid) async {
     isLoading = true;
-    print('loading 1');
     notifyListeners();
 
     try {
-      // Fetch favourites from the service
-    print('loading 2');
-
+      await _loadFavouriteProductIds(); // Load favourite IDs from SharedPreferences first
       favouriteProducts = await favouritesService.fetchFavourites(loginid);
-    print('loading 3');
-
-      print('Fav Products: $favouriteProducts');
       favouriteProductIds =
           favouriteProducts.map((product) => product.id).toList();
+      await _saveFavouriteProductIds(); // Update SharedPreferences with current favourites
+      print('Fav Products: $favouriteProducts');
       print('Fav IDs: $favouriteProductIds');
     } catch (e) {
       print("Error fetching favourite products: $e");
@@ -60,5 +62,24 @@ class FavouriteProvider with ChangeNotifier {
   // Check if a product is in favourites
   bool isFavourite(int productid) {
     return favouriteProductIds.contains(productid);
+  }
+
+  // Save favourite product IDs to SharedPreferences
+  Future<void> _saveFavouriteProductIds() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setStringList(
+      'favouriteProductIds',
+      favouriteProductIds.map((id) => id.toString()).toList(),
+    );
+  }
+
+  // Load favourite product IDs from SharedPreferences
+  Future<void> _loadFavouriteProductIds() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? savedIds = prefs.getStringList('favouriteProductIds');
+    if (savedIds != null) {
+      favouriteProductIds = savedIds.map((id) => int.parse(id)).toList();
+      notifyListeners();
+    }
   }
 }
