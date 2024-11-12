@@ -1,3 +1,4 @@
+import 'package:aami/viewmodels/auth_provider.dart';
 import 'package:aami/viewmodels/product_provider.dart';
 import 'package:aami/views/product/all_product.dart';
 import 'package:aami/views/product/single_product.dart';
@@ -27,6 +28,10 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+
+    final authProvider = Provider.of<AuthProvider>(context);
+    final  String name = authProvider.name!;
+
     return SafeArea(
       child: Scaffold(
         body: Padding(
@@ -37,7 +42,7 @@ class _HomePageState extends State<HomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Hello',
+                  'Hello $name',
                   style: Theme.of(context)
                       .textTheme
                       .bodyLarge!

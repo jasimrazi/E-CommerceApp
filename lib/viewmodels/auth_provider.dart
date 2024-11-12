@@ -19,6 +19,10 @@ class AuthProvider extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     loginId = prefs.getString('loginId');
     name = prefs.getString('name');
+
+    //Notify for getting the name in homepage
+    notifyListeners();
+
     bool isLogged = prefs.getBool('isLogged') ?? false;
 
     if (isLogged && loginId != null) {
@@ -73,7 +77,8 @@ class AuthProvider extends ChangeNotifier {
   }
 
   // Signup method with error handling and rethrow
-  Future<void> signup(String email, String password, String name, String number) async {
+  Future<void> signup(
+      String email, String password, String name, String number) async {
     setLoading(true); // Start loading
     try {
       final response = await authService.signup(email, password, name, number);
