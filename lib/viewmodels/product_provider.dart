@@ -1,5 +1,5 @@
-import 'package:aami/models/product_model.dart';
 import 'package:flutter/material.dart';
+import 'package:aami/models/product_model.dart';
 import 'package:aami/services/product_service.dart';
 
 class ProductProvider with ChangeNotifier {
@@ -9,8 +9,7 @@ class ProductProvider with ChangeNotifier {
   bool isLoading = false;
 
   Future<void> fetchProducts() async {
-    // Check if products are already cached
-    if (products.isNotEmpty) return; // Return immediately if data is cached
+    if (products.isNotEmpty) return; // Use cached data if available
 
     isLoading = true;
     notifyListeners();
@@ -33,19 +32,13 @@ class ProductProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await productService.fetchSingleProduct(productID);
+      // Fetch the product directly as a `Product` instance
+      product = await productService.fetchSingleProduct(productID);
 
-      if (response != null && response.isNotEmpty) {
-        // Parse the single product data
-        product = Product.fromJson(response);
-
-        if (product == null) {
-          print("Product is null after fetchSingleProduct.");
-        } else {
-          print("Product ID: ${product!.id}");
-        }
-      } else {
+      if (product == null) {
         print("No product data found for ID: $productID");
+      } else {
+        print("Fetched Single Product ID: ${product!.id}");
       }
     } catch (e) {
       print("Error fetching product: $e");

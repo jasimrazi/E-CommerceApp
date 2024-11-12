@@ -24,6 +24,7 @@ class _HomePageState extends State<HomePage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<ProductProvider>(context, listen: false).fetchProducts();
     });
+    
   }
 
   @override
@@ -115,6 +116,7 @@ class _HomePageState extends State<HomePage> {
                               );
                             },
                             child: ProductCard(
+                              productId: product.id,
                               title: product.title,
                               price: product.price,
                               image: product.images.isNotEmpty

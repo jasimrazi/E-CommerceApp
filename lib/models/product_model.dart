@@ -21,36 +21,54 @@ class Product {
 
   // From JSON for a single product
   factory Product.fromJson(Map<String, dynamic> json) {
-    var productData = json['data'] != null && (json['data'] as List).isNotEmpty
-        ? (json['data'] as List)[0] // Get the first product from 'data'
-        : null;
-
-    if (productData == null) {
-      throw Exception("Product data is missing.");
+    // Access the first element of 'data' if 'data' exists and is a list with at least one item
+    Map<String, dynamic> productData;
+    if (json['data'] != null &&
+        json['data'] is List &&
+        json['data'].isNotEmpty) {
+      productData = json['data'][0];
+    } else {
+      productData = json;
     }
 
-    // Parse the 'images' and 'sizes' properly
+    // Extract fields individually for clarity
+    int id = productData['id'] ?? 0;
+    List<String> images = [];
+    if (productData['images'] != null && productData['images'] is List) {
+      images = List<String>.from(
+          productData['images'].map((img) => img['image_url'] ?? ''));
+    }
+
+    List<String> sizes = [];
+    if (productData['sizes'] != null && productData['sizes'] is List) {
+      sizes = List<String>.from(
+          productData['sizes'].map((size) => size['size'] ?? ''));
+    }
+
+    String title = productData['title'] ?? '';
+    String description = productData['description'] ?? '';
+    String price = productData['price'] ?? '';
+    String category = productData['category'] ?? '';
+    String brand = productData['brand'] ?? '';
+
     return Product(
-      id: productData['id'] ?? 0, // Default to 0 if id is null
-      images: List<String>.from(
-          productData['images']?.map((img) => img['image_url'] ?? '') ?? []),
-      sizes: List<String>.from(
-          productData['sizes']?.map((size) => size['size'] ?? '') ?? []),
-      title: productData['title'] ?? '',
-      description: productData['description'] ?? '',
-      price: productData['price'] ?? '',
-      category: productData['category'] ?? '',
-      brand: productData['brand'] ?? '',
+      id: id,
+      images: images,
+      sizes: sizes,
+      title: title,
+      description: description,
+      price: price,
+      category: category,
+      brand: brand,
     );
   }
 
-  // From JSON for multiple products (e.g., from a list of products in the response)
+
+  // From JSON for a list of products
   static List<Product> fromJsonList(Map<String, dynamic> json) {
     if (json['data'] != null && json['data'] is List) {
-      return (json['data'] as List)
-          .map((productData) => Product.fromJson({
-                'data': [productData]
-              }))
+      return (json['data'] as List<dynamic>)
+          .map((productData) => Product.fromJson(productData))
           .toList();
     } else {
       throw Exception("Invalid or empty product list data.");

@@ -23,8 +23,6 @@ class _SingleProductState extends State<SingleProduct> {
   void initState() {
     super.initState();
 
-
-    
     // Fetch the single product when the page is loaded
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<ProductProvider>(context, listen: false)
@@ -36,8 +34,6 @@ class _SingleProductState extends State<SingleProduct> {
   Widget build(BuildContext context) {
     final productProvider = Provider.of<ProductProvider>(context);
     final product = productProvider.product;
-
-   
 
     return Scaffold(
       extendBodyBehindAppBar: true,

@@ -10,8 +10,6 @@ class AllProduct extends StatelessWidget {
   AllProduct({super.key});
 
   @override
-  
-
   @override
   Widget build(BuildContext context) {
     final productProvider = Provider.of<ProductProvider>(context);
@@ -46,8 +44,10 @@ class AllProduct extends StatelessWidget {
                         final String imageUrl = product.images[0];
                         final String title = product.title;
                         final String price = product.price;
+                        final int id = product.id;
 
                         return ProductCard(
+                          productId: id,
                           title: title,
                           image: imageUrl,
                           price: price,

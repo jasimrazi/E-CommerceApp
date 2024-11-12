@@ -1,13 +1,18 @@
+import 'package:aami/viewmodels/auth_provider.dart';
+import 'package:aami/viewmodels/favourite_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 class ProductCard extends StatelessWidget {
+  final int productId;
   final String title;
   final String price;
   final String image;
 
   const ProductCard({
     super.key,
+    required this.productId,
     required this.title,
     required this.price,
     required this.image,
@@ -15,6 +20,11 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Access FavouriteProvider to check if the product is a favourite
+    final favouriteProvider = Provider.of<FavouriteProvider>(context);
+    final authProvider = Provider.of<AuthProvider>(context);
+    final loginID = authProvider.loginId!;
+
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,8 +44,7 @@ class ProductCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                   child: Image.network(
                     image,
-                    fit: BoxFit
-                        .contain, // Ensures the image fits within the container
+                    fit: BoxFit.contain,
                     width: double.infinity,
                     height: 200.h,
                     errorBuilder: (context, error, stackTrace) {
@@ -50,11 +59,17 @@ class ProductCard extends StatelessWidget {
                 right: 1,
                 child: IconButton(
                   icon: Icon(
-                    Icons.favorite_border,
-                    color: Theme.of(context).colorScheme.secondary,
+                    favouriteProvider.isFavourite(productId)
+                        ? Icons.favorite
+                        : Icons.favorite_border,
+                    color: favouriteProvider.isFavourite(productId)
+                        ? Colors.red
+                        : Theme.of(context).colorScheme.secondary,
                   ),
                   onPressed: () {
-                    // Add functionality to handle favorite action here
+                    // Toggle favorite status on button press
+                    favouriteProvider.toggleFavourite(
+                        loginID, productId);
                   },
                 ),
               ),
@@ -68,11 +83,12 @@ class ProductCard extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
           Spacer(),
-          Text('\$$price',
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge!
-                  .copyWith(fontWeight: FontWeight.bold)),
+          Text(
+            '\$$price',
+            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
         ],
       ),
     );
