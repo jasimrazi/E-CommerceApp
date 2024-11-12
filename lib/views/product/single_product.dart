@@ -1,4 +1,6 @@
 import 'package:aami/viewmodels/product_provider.dart';
+import 'package:aami/viewmodels/review_provider.dart';
+import 'package:aami/views/review/allreview_page.dart';
 import 'package:aami/widgets/appbar.dart';
 import 'package:aami/widgets/bottomnavbutton.dart';
 import 'package:aami/widgets/cards/imagecard.dart';
@@ -9,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:readmore/readmore.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 class SingleProduct extends StatefulWidget {
   final int productID;
@@ -19,34 +22,44 @@ class SingleProduct extends StatefulWidget {
 }
 
 class _SingleProductState extends State<SingleProduct> {
+  late ScrollController _scrollController;
+
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController();
 
     // Fetch the single product when the page is loaded
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<ProductProvider>(context, listen: false)
-          .fetchSingleProduct(widget.productID);
+      final productProvider =
+          Provider.of<ProductProvider>(context, listen: false);
+      productProvider.fetchSingleProduct(widget.productID);
     });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final productProvider = Provider.of<ProductProvider>(context);
+    final reviewProvider = Provider.of<ReviewProvider>(context);
     final product = productProvider.product;
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: CustomAppbar(
-        isCart: true,
-      ),
+      appBar: CustomAppbar(isCart: true),
       body: productProvider.isLoading
-          ? Center(child: CustomLoading())
+          ? Center(child: Scaffold(body: Center(child: CustomLoading())))
           : product == null
               ? Center(child: Text('Product not found'))
               : Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: SingleChildScrollView(
+                    controller: _scrollController,
                     physics: BouncingScrollPhysics(),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,10 +124,8 @@ class _SingleProductState extends State<SingleProduct> {
                           ),
                         ),
                         SizedBox(height: 20.h),
-                        Text(
-                          'Size',
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
+                        Text('Size',
+                            style: Theme.of(context).textTheme.bodyMedium),
                         SizedBox(height: 10.h),
                         SizedBox(
                           height: 50.h,
@@ -133,10 +144,8 @@ class _SingleProductState extends State<SingleProduct> {
                           ),
                         ),
                         SizedBox(height: 20.h),
-                        Text(
-                          'Description',
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
+                        Text('Description',
+                            style: Theme.of(context).textTheme.bodyMedium),
                         SizedBox(height: 10.h),
                         ReadMoreText(
                           product.description,
@@ -159,24 +168,42 @@ class _SingleProductState extends State<SingleProduct> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              'Reviews',
-                              style: Theme.of(context).textTheme.bodyMedium,
-                            ),
+                            Text('Reviews',
+                                style: Theme.of(context).textTheme.bodyMedium),
                             TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => AllReviewPage(),
+                                    ));
+                              },
                               child: Text(
                                 'View All',
                                 style: Theme.of(context).textTheme.bodySmall,
                               ),
-                            )
+                            ),
                           ],
                         ),
                         SizedBox(height: 10.h),
-                        // ReviewCard(
-                        //     review: product.reviews.isNotEmpty
-                        //         ? product.reviews[0]
-                        //         : null),
+                        // Review section with VisibilityDetector
+                        VisibilityDetector(
+                          key: Key("review-section"),
+                          onVisibilityChanged: (info) {
+                            // Fetch reviews only if visible and not already loading
+                            if (info.visibleFraction > 0.1 &&
+                                !reviewProvider.isLoading &&
+                                reviewProvider.reviews.isEmpty) {
+                              reviewProvider.fetchReviews(widget.productID);
+                            }
+                          },
+                          child: reviewProvider.isLoading
+                              ? Center(child: CustomLoading())
+                              : reviewProvider.reviews.isNotEmpty
+                                  ? ReviewCard(
+                                      review: reviewProvider.reviews.first)
+                                  : Text('No reviews available.'),
+                        ),
                         SizedBox(height: 30.h),
                       ],
                     ),

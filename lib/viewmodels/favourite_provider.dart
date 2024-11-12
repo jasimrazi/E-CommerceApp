@@ -49,8 +49,6 @@ class FavouriteProvider with ChangeNotifier {
       favouriteProductIds =
           favouriteProducts.map((product) => product.id).toList();
       await _saveFavouriteProductIds(); // Update SharedPreferences with current favourites
-      print('Fav Products: $favouriteProducts');
-      print('Fav IDs: $favouriteProductIds');
     } catch (e) {
       print("Error fetching favourite products: $e");
     } finally {

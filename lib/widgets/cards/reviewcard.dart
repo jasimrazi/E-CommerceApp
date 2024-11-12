@@ -1,18 +1,18 @@
+import 'package:aami/models/review_model.dart';
+import 'package:aami/utils/datetime.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:readmore/readmore.dart';
 
 class ReviewCard extends StatelessWidget {
-  final Map<String, dynamic> review;
+  final Review review;
 
   const ReviewCard({Key? key, required this.review}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final DateFormat dateFormat = DateFormat('d MMM, y');
-    final String formattedDate =
-        dateFormat.format(DateTime.parse(review['date_created']));
+    
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,7 +36,7 @@ class ReviewCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  review['username'],
+                  review.username,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 Row(
@@ -50,7 +50,7 @@ class ReviewCard extends StatelessWidget {
                       width: 5.w,
                     ),
                     Text(
-                      formattedDate,
+                      formatDate(review.dateCreated),
                       style: Theme.of(context)
                           .textTheme
                           .bodySmall!
@@ -65,7 +65,7 @@ class ReviewCard extends StatelessWidget {
               children: List.generate(5, (index) {
                 return Icon(
                   Icons.star,
-                  color: index < review['rating']
+                  color: index < review.rating
                       ? Color(0xffFF981F)
                       : Theme.of(context)
                           .colorScheme
@@ -79,7 +79,7 @@ class ReviewCard extends StatelessWidget {
         ),
         SizedBox(height: 15.h),
         ReadMoreText(
-          review['comment'],
+          review.comment,
           trimMode: TrimMode.Line,
           trimLines: 2,
           colorClickableText: Theme.of(context).colorScheme.primary,

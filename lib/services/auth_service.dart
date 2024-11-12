@@ -17,7 +17,6 @@ class AuthService {
       } else {
         // Decode the response to get a specific error message from the API, if available
         final Map<String, dynamic> errorData = json.decode(response.body);
-        print('AuthService login error: ${errorData['Message']}');
         throw Exception(errorData['Message'] ?? 'Failed to log in');
       }
     } catch (error) {
@@ -38,7 +37,6 @@ class AuthService {
             {'email': email, 'password': password, 'name': name, 'number': number}),
       );
 
-      print(response.body);
 
       if (response.statusCode == 200) {
         return json.decode(response.body);
@@ -47,7 +45,6 @@ class AuthService {
         throw Exception(errorData['message'] ?? 'Failed to sign up');
       }
     } catch (error) {
-      print('AuthService signup error: $error');
       rethrow; // Rethrow the error for handling in AuthProvider
     }
   }

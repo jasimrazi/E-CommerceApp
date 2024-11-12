@@ -58,12 +58,6 @@ class AuthProvider extends ChangeNotifier {
     try {
       final response = await authService.login(email, password);
 
-      print('///');
-      print(response);
-      print(response['data']['loginid']);
-      print(response['data']['name']);
-      print('///');
-
       loginId = response['data']['loginid'];
       name = response['data']['name'];
       await _saveUserData(loginId!, name!);

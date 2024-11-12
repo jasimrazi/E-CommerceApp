@@ -1,37 +1,17 @@
+import 'package:aami/viewmodels/review_provider.dart';
 import 'package:aami/widgets/appbar.dart';
 import 'package:aami/widgets/cards/reviewcard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 class AllReviewPage extends StatelessWidget {
   AllReviewPage({super.key});
 
-  // Sample list of reviews
-  final List<Map<String, dynamic>> reviews = [
-    {
-      "user_id": 1,
-      "username": "Ayisha",
-      "product_id": 1,
-      "rating": 3,
-      "comment":
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque malesuada eget vitae amet",
-      "date_created": "2024-11-06T12:52:14.875967Z",
-      "date_updated": "2024-11-06T13:00:10.538496Z"
-    },
-    {
-      "user_id": 2,
-      "username": "John",
-      "product_id": 1,
-      "rating": 4,
-      "comment": "Great quality!",
-      "date_created": "2024-11-05T08:30:14.123456Z",
-      "date_updated": "2024-11-05T09:00:10.654321Z"
-    },
-    // Add more reviews as needed
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final reviewProvider = Provider.of<ReviewProvider>(context);
+
     return SafeArea(
       child: Scaffold(
         appBar: CustomAppbar(
@@ -46,7 +26,7 @@ class AllReviewPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '${reviews.length} Reviews',
+                    '${reviewProvider.reviews.length} Reviews',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   ElevatedButton(
@@ -87,9 +67,9 @@ class AllReviewPage extends StatelessWidget {
               SizedBox(height: 16.0), // Add space between the row and the list
               Expanded(
                 child: ListView.builder(
-                  itemCount: reviews.length,
+                  itemCount: reviewProvider.reviews.length,
                   itemBuilder: (context, index) {
-                    return ReviewCard(review: reviews[index]);
+                    return ReviewCard(review: reviewProvider.reviews[index]);
                   },
                 ),
               ),

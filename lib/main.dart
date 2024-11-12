@@ -2,6 +2,7 @@ import 'package:aami/utils/theme.dart';
 import 'package:aami/viewmodels/auth_provider.dart';
 import 'package:aami/viewmodels/favourite_provider.dart';
 import 'package:aami/viewmodels/product_provider.dart';
+import 'package:aami/viewmodels/review_provider.dart';
 import 'package:aami/views/auth/login_page.dart';
 import 'package:aami/views/home/bottom_navbar.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,9 @@ class MainApp extends StatelessWidget {
         ), 
         ChangeNotifierProvider(
           create: (_) => FavouriteProvider(),
+        ), 
+        ChangeNotifierProvider(
+          create: (_) => ReviewProvider(),
         ), 
       ],
       child: ScreenUtilInit(
