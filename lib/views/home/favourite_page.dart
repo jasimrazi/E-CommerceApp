@@ -2,6 +2,7 @@ import 'package:aami/viewmodels/auth_provider.dart';
 import 'package:aami/viewmodels/favourite_provider.dart';
 import 'package:aami/widgets/cards/productcard.dart';
 import 'package:aami/widgets/loadinganimation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -40,7 +41,7 @@ class _FavouritePageState extends State<FavouritePage> {
                 builder: (context, favouriteProvider, child) {
                   // Display loading indicator if data is still loading
                   if (favouriteProvider.isLoading) {
-                    return Center(child: CustomLoading());
+                    return Center(child: CupertinoActivityIndicator());
                   }
 
                   // If no favourites are available, display a placeholder message

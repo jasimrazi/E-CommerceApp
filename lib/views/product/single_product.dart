@@ -7,6 +7,7 @@ import 'package:aami/widgets/cards/imagecard.dart';
 import 'package:aami/widgets/cards/reviewcard.dart';
 import 'package:aami/widgets/cards/sizecard.dart';
 import 'package:aami/widgets/loadinganimation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -29,11 +30,15 @@ class _SingleProductState extends State<SingleProduct> {
     super.initState();
     _scrollController = ScrollController();
 
-    // Fetch the single product when the page is loaded
+    // Fetch the single product and reset reviews when the page loads
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final productProvider =
           Provider.of<ProductProvider>(context, listen: false);
+      final reviewProvider =
+          Provider.of<ReviewProvider>(context, listen: false);
+
       productProvider.fetchSingleProduct(widget.productID);
+      reviewProvider.clearReviews(); // Clear previous reviews
     });
   }
 
@@ -53,7 +58,9 @@ class _SingleProductState extends State<SingleProduct> {
       extendBodyBehindAppBar: true,
       appBar: CustomAppbar(isCart: true),
       body: productProvider.isLoading
-          ? Center(child: Scaffold(body: Center(child: CustomLoading())))
+          ? Center(
+              child:
+                  Scaffold(body: Center(child: CupertinoActivityIndicator())))
           : product == null
               ? Center(child: Text('Product not found'))
               : Padding(
@@ -190,20 +197,26 @@ class _SingleProductState extends State<SingleProduct> {
                         VisibilityDetector(
                           key: Key("review-section"),
                           onVisibilityChanged: (info) {
-                            // Fetch reviews only if visible and not already loading
                             if (info.visibleFraction > 0.1 &&
                                 !reviewProvider.isLoading &&
-                                reviewProvider.reviews.isEmpty) {
+                                reviewProvider.reviews.isEmpty &&
+                                reviewProvider.errorMessage == null &&
+                                !reviewProvider.hasFetchedReviews) {
                               reviewProvider.fetchReviews(widget.productID);
                             }
                           },
                           child: reviewProvider.isLoading
-                              ? Center(child: CustomLoading())
+                              ? Center(child: CupertinoActivityIndicator())
                               : reviewProvider.reviews.isNotEmpty
                                   ? ReviewCard(
-                                      review: reviewProvider.reviews.first)
-                                  : Text('No reviews available.'),
+                                      review: reviewProvider.reviews
+                                          .first) // Or display all reviews in a list
+                                  : reviewProvider.errorMessage != null
+                                      ? Text(reviewProvider.errorMessage!)
+                                      : Text('No reviews available.'),
                         ),
+
+
                         SizedBox(height: 30.h),
                       ],
                     ),

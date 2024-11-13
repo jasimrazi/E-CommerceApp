@@ -10,11 +10,12 @@ class ReviewService {
     try {
       final response = await http.get(url);
 
-
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
         final reviewResponse = ReviewResponse.fromJson(responseData);
         return reviewResponse.reviews;
+      } else if (response.statusCode == 404) {
+        return [];
       } else {
         throw Exception('Failed to load reviews');
       }

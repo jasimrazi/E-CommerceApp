@@ -14,26 +14,32 @@ class ReviewProvider with ChangeNotifier {
   // Error message if fetching or posting fails
   String? errorMessage;
 
+  // New flag to track if reviews were fetched
+  bool hasFetchedReviews = false;
   // Fetch reviews for a specific product
+
   Future<void> fetchReviews(int productId) async {
+    if (isLoading || hasFetchedReviews) return;
+
     isLoading = true;
     errorMessage = null;
     notifyListeners();
 
-    if (reviews.isNotEmpty) return; // Use cached data if available
-
-
-
     try {
       reviews = await reviewService.getReviews(productId);
-
+      // Set hasFetchedReviews to true after the first attempt
+      hasFetchedReviews = true;
     } catch (e) {
+      print('Error in fetchReviews: ${e.toString()}');
       errorMessage = 'Failed to load reviews: $e';
+      reviews =
+          []; // Ensure reviews are empty on error to stop infinite loading
     } finally {
       isLoading = false;
       notifyListeners();
     }
   }
+
 
   // Post a review for a specific product
   Future<void> postReview({
@@ -61,5 +67,12 @@ class ReviewProvider with ChangeNotifier {
       isLoading = false;
       notifyListeners();
     }
+  }
+
+  // Clear review list
+  void clearReviews() {
+    reviews = [];
+    hasFetchedReviews = false;
+    notifyListeners();
   }
 }

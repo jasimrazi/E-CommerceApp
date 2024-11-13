@@ -5,6 +5,7 @@ import 'package:aami/views/product/single_product.dart';
 import 'package:aami/widgets/cards/productcard.dart';
 import 'package:aami/widgets/loadinganimation.dart';
 import 'package:aami/widgets/searchbar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -81,7 +82,7 @@ class _HomePageState extends State<HomePage> {
                   builder: (context, productProvider, child) {
                     // Display a loading indicator while loading, or a message if products are empty
                     if (productProvider.isLoading) {
-                      return Center(child: CustomLoading());
+                      return Center(child: CupertinoActivityIndicator());
                     } else if (productProvider.products.isEmpty) {
                       return Center(
                         child: Text(
