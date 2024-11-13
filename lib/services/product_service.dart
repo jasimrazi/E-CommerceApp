@@ -9,6 +9,7 @@ class ProductService {
     try {
       final response = await http.get(Uri.parse('$baseUrl/products'));
 
+
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonResponse = json.decode(response.body);
 
@@ -35,8 +36,8 @@ class ProductService {
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonResponse = json.decode(response.body);
 
-
-        return Product.fromJson(jsonResponse); // This should return a Map for a single product
+        return Product.fromJson(
+            jsonResponse); // This should return a Map for a single product
       } else {
         throw Exception("Failed to load product: ${response.statusCode}");
       }

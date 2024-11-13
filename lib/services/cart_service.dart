@@ -6,10 +6,13 @@ import 'package:http/http.dart' as http;
 class CartService {
   // Fetch cart details for a user
   Future<List<CartProduct>> fetchCart(String loginId) async {
-    final url = Uri.parse('$baseUrl/cart?loginid=$loginId');
+    final url = Uri.parse('$baseUrl/carts/user/$loginId');
 
     try {
       final response = await http.get(url);
+
+      print(response.statusCode);
+      print(response.body);
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body)['data'];

@@ -5,18 +5,22 @@ class CartCard extends StatelessWidget {
   final String title;
   final String price;
   final List<String> images;
-  final int quantity;
+  final String size; // Added size field
+  final int quantity; // Quantity handled by provider
   final VoidCallback onIncrease;
   final VoidCallback onDecrease;
+  final VoidCallback onRemove; // Add remove callback to handle item removal
 
   const CartCard({
     Key? key,
     required this.title,
     required this.price,
     required this.images,
+    required this.size, // Initialize size
     required this.quantity,
     required this.onIncrease,
     required this.onDecrease,
+    required this.onRemove, // Initialize remove callback
   }) : super(key: key);
 
   @override
@@ -32,7 +36,7 @@ class CartCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Display the first image with top-to-bottom fill
+            // Display the first image
             ClipRRect(
               borderRadius: BorderRadius.circular(8.0),
               child: Image.network(
@@ -59,6 +63,11 @@ class CartCard extends StatelessWidget {
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   SizedBox(height: 8.0),
+                  Text(
+                    'Size: $size', // Display size
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  SizedBox(height: 8.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -80,9 +89,7 @@ class CartCard extends StatelessWidget {
                         ],
                       ),
                       IconButton(
-                        onPressed: () {
-                          // Define remove action here
-                        },
+                        onPressed: onRemove, // Handle remove action
                         icon: Icon(
                           Icons.delete_outline,
                           color: Colors.redAccent,
