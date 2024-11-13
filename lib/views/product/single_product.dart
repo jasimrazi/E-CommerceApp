@@ -1,5 +1,6 @@
 import 'package:aami/viewmodels/product_provider.dart';
 import 'package:aami/viewmodels/review_provider.dart';
+import 'package:aami/viewmodels/selection_provider.dart';
 import 'package:aami/views/review/allreview_page.dart';
 import 'package:aami/widgets/appbar.dart';
 import 'package:aami/widgets/bottomnavbutton.dart';
@@ -53,7 +54,7 @@ class _SingleProductState extends State<SingleProduct> {
     final productProvider = Provider.of<ProductProvider>(context);
     final reviewProvider = Provider.of<ReviewProvider>(context);
     final product = productProvider.product;
-     productProvider.productID = widget.productID;
+    productProvider.productID = widget.productID;
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -72,15 +73,22 @@ class _SingleProductState extends State<SingleProduct> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          width: double.maxFinite,
-                          height: 400.h,
-                          child: Image.network(
-                            product.images[0],
-                            fit: BoxFit.contain,
-                          ),
+                        // Main Image Display
+                        Consumer<SelectionProvider>(
+                          builder: (context, selectionProvider, _) {
+                            return Container(
+                              width: double.maxFinite,
+                              height: 400.h,
+                              child: Image.network(
+                                product.images[
+                                    selectionProvider.selectedImageIndex],
+                                fit: BoxFit.contain,
+                              ),
+                            );
+                          },
                         ),
                         SizedBox(height: 20.h),
+                        // Product Title and Price
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -115,6 +123,7 @@ class _SingleProductState extends State<SingleProduct> {
                           ],
                         ),
                         SizedBox(height: 20.h),
+                        // Image Thumbnail List
                         SizedBox(
                           height: 75.h,
                           child: ListView.builder(
@@ -123,15 +132,28 @@ class _SingleProductState extends State<SingleProduct> {
                             scrollDirection: Axis.horizontal,
                             itemCount: product.images.length,
                             itemBuilder: (context, index) {
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: ImageCard(image: product.images[index]),
+                              return GestureDetector(
+                                onTap: () {
+                                  Provider.of<SelectionProvider>(context,
+                                          listen: false)
+                                      .updateSelectedImage(index);
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child:
+                                      ImageCard(image: product.images[index],
+                                      isSelected: index ==
+                                        Provider.of<SelectionProvider>(context)
+                                            .selectedImageIndex,
+                                  ),
+                                ),
                               );
                             },
                           ),
                         ),
                         SizedBox(height: 20.h),
+                        // Size Selection
                         Text('Size',
                             style: Theme.of(context).textTheme.bodyMedium),
                         SizedBox(height: 10.h),
@@ -152,6 +174,7 @@ class _SingleProductState extends State<SingleProduct> {
                           ),
                         ),
                         SizedBox(height: 20.h),
+                        // Product Description
                         Text('Description',
                             style: Theme.of(context).textTheme.bodyMedium),
                         SizedBox(height: 10.h),
@@ -173,6 +196,7 @@ class _SingleProductState extends State<SingleProduct> {
                               ),
                         ),
                         SizedBox(height: 20.h),
+                        // Reviews Section
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -210,13 +234,11 @@ class _SingleProductState extends State<SingleProduct> {
                               ? Center(child: CupertinoActivityIndicator())
                               : reviewProvider.reviews.isNotEmpty
                                   ? ReviewCard(
-                                      review: reviewProvider.reviews
-                                          .first) // Or display all reviews in a list
+                                      review: reviewProvider.reviews.first)
                                   : reviewProvider.errorMessage != null
                                       ? Text(reviewProvider.errorMessage!)
                                       : Text('No reviews available.'),
                         ),
-
                         SizedBox(height: 30.h),
                       ],
                     ),
