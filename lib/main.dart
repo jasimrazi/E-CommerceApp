@@ -1,5 +1,6 @@
 import 'package:aami/utils/theme.dart';
 import 'package:aami/viewmodels/auth_provider.dart';
+import 'package:aami/viewmodels/cart_provider.dart';
 import 'package:aami/viewmodels/favourite_provider.dart';
 import 'package:aami/viewmodels/product_provider.dart';
 import 'package:aami/viewmodels/selection_provider.dart';
@@ -35,6 +36,7 @@ class MainApp extends StatelessWidget {
           create: (_) => ReviewProvider(),
         ), 
         ChangeNotifierProvider(create: (_) => SelectionProvider()),
+        ChangeNotifierProvider(create: (_) => CartProvider()),
       ],
       child: ScreenUtilInit(
         designSize:

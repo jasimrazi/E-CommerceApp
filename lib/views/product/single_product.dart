@@ -1,3 +1,5 @@
+import 'package:aami/viewmodels/auth_provider.dart';
+import 'package:aami/viewmodels/cart_provider.dart';
 import 'package:aami/viewmodels/product_provider.dart';
 import 'package:aami/viewmodels/review_provider.dart';
 import 'package:aami/viewmodels/selection_provider.dart';
@@ -31,15 +33,17 @@ class _SingleProductState extends State<SingleProduct> {
     super.initState();
     _scrollController = ScrollController();
 
-    // Fetch the single product and reset reviews when the page loads
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final productProvider =
           Provider.of<ProductProvider>(context, listen: false);
       final reviewProvider =
           Provider.of<ReviewProvider>(context, listen: false);
+      final selectionProvider =
+          Provider.of<SelectionProvider>(context, listen: false);
 
       productProvider.fetchSingleProduct(widget.productID);
-      reviewProvider.clearReviews(); // Clear previous reviews
+      reviewProvider.clearReviews();
+      selectionProvider.clearSelectedSize();
     });
   }
 
@@ -53,6 +57,8 @@ class _SingleProductState extends State<SingleProduct> {
   Widget build(BuildContext context) {
     final productProvider = Provider.of<ProductProvider>(context);
     final reviewProvider = Provider.of<ReviewProvider>(context);
+    final selectionProvider = Provider.of<SelectionProvider>(context);
+    final authProvider = Provider.of<AuthProvider>(context);
     final product = productProvider.product;
     productProvider.productID = widget.productID;
 
@@ -61,8 +67,10 @@ class _SingleProductState extends State<SingleProduct> {
       appBar: CustomAppbar(isCart: true),
       body: productProvider.isLoading
           ? Center(
-              child:
-                  Scaffold(body: Center(child: CupertinoActivityIndicator())))
+              child: Scaffold(
+                body: Center(child: CupertinoActivityIndicator()),
+              ),
+            )
           : product == null
               ? Center(child: Text('Product not found'))
               : Padding(
@@ -134,18 +142,15 @@ class _SingleProductState extends State<SingleProduct> {
                             itemBuilder: (context, index) {
                               return GestureDetector(
                                 onTap: () {
-                                  Provider.of<SelectionProvider>(context,
-                                          listen: false)
-                                      .updateSelectedImage(index);
+                                  selectionProvider.updateSelectedImage(index);
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8.0),
-                                  child:
-                                      ImageCard(image: product.images[index],
-                                      isSelected: index ==
-                                        Provider.of<SelectionProvider>(context)
-                                            .selectedImageIndex,
+                                  child: ImageCard(
+                                    image: product.images[index],
+                                    isSelected: index ==
+                                        selectionProvider.selectedImageIndex,
                                   ),
                                 ),
                               );
@@ -165,10 +170,20 @@ class _SingleProductState extends State<SingleProduct> {
                             scrollDirection: Axis.horizontal,
                             itemCount: product.sizes.length,
                             itemBuilder: (context, index) {
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: SizeCard(size: product.sizes[index]),
+                              return GestureDetector(
+                                onTap: () {
+                                  selectionProvider.updateSelectedSize(
+                                      index, product.sizes[index]);
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: SizeCard(
+                                    size: product.sizes[index],
+                                    isSelected: index ==
+                                        selectionProvider.selectedSizeIndex,
+                                  ),
+                                ),
                               );
                             },
                           ),
@@ -184,8 +199,8 @@ class _SingleProductState extends State<SingleProduct> {
                           trimLines: 2,
                           colorClickableText:
                               Theme.of(context).colorScheme.primary,
-                          trimCollapsedText: 'Show more',
-                          trimExpandedText: 'Show less',
+                          trimCollapsedText: ' Show more',
+                          trimExpandedText: ' Show less',
                           style: TextStyle(
                               color: Theme.of(context).colorScheme.secondary),
                           moreStyle: Theme.of(context)
@@ -244,10 +259,31 @@ class _SingleProductState extends State<SingleProduct> {
                     ),
                   ),
                 ),
-      bottomNavigationBar: CustomBottomNavButton(
-        onTap: () {},
-        title: 'Add to Cart',
-      ),
+      bottomNavigationBar:
+          Consumer<CartProvider>(builder: (context, cartProvider, _) {
+        return CustomBottomNavButton(
+          onTap: () async {
+            if (selectionProvider.selectedSize == null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Please select a size first')),
+              );
+            } else {
+              try {
+                final response = await cartProvider.addToCart(authProvider.loginId!, productProvider.productID!, selectionProvider.selectedSize!);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(response)),
+                );
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(e.toString())),
+                );
+              }
+            }
+          },
+          title: 'Add to Cart',
+          isLoading: cartProvider.isLoading,
+        );
+      }),
     );
   }
 }

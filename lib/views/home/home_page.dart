@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
                       .bodyLarge!
                       .copyWith(fontSize: 28.sp),
                 ),
-                Text('Welcome to Aami',
+                Text('Welcome to Aami Store',
                     style: Theme.of(context).textTheme.bodySmall!),
                 CustomSearchBar(),
                 Row(
