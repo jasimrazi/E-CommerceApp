@@ -5,16 +5,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class FavouriteProvider with ChangeNotifier {
   final FavouriteService favouritesService = FavouriteService();
-  List<int> favouriteProductIds = []; // Holds the IDs of favourite products
-  List<Product> favouriteProducts =
-      []; // Holds full product data for favourites
+  List<int> favouriteProductIds = [];
+  List<Product> favouriteProducts = [];
   bool isLoading = false;
 
   FavouriteProvider() {
-    _loadFavouriteProductIds(); // Load saved favourite product IDs on initialization
+    _loadFavouriteProductIds();
   }
 
-  // Toggles the favourite status of a product
+  // Toggle the favourite status of a product
   Future<void> toggleFavourite(String loginid, int productid) async {
     isLoading = true;
     notifyListeners();
@@ -23,13 +22,15 @@ class FavouriteProvider with ChangeNotifier {
       final message = await favouritesService.addToFav(loginid, productid);
       print(message);
 
-      // Toggle local favourite status based on the response message
       if (message == "Product added to favourites") {
         favouriteProductIds.add(productid);
       } else if (message == "Product removed from favourites") {
         favouriteProductIds.remove(productid);
+        // Remove product from favouriteProducts list as well
+        favouriteProducts.removeWhere((product) => product.id == productid);
       }
-      await _saveFavouriteProductIds(); // Save updated favourite IDs to SharedPreferences
+
+      await _saveFavouriteProductIds();
     } catch (e) {
       print("Error toggling favourite: $e");
     } finally {
@@ -44,11 +45,13 @@ class FavouriteProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      await _loadFavouriteProductIds(); // Load favourite IDs from SharedPreferences first
+      await _loadFavouriteProductIds();
       favouriteProducts = await favouritesService.fetchFavourites(loginid);
+
+      // Ensure favourite IDs align with fetched products
       favouriteProductIds =
           favouriteProducts.map((product) => product.id).toList();
-      await _saveFavouriteProductIds(); // Update SharedPreferences with current favourites
+      await _saveFavouriteProductIds();
     } catch (e) {
       print("Error fetching favourite products: $e");
     } finally {
