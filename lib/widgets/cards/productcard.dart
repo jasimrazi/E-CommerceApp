@@ -1,5 +1,6 @@
 import 'package:aami/viewmodels/auth_provider.dart';
 import 'package:aami/viewmodels/favourite_provider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -58,14 +59,19 @@ class ProductCard extends StatelessWidget {
                 top: 1,
                 right: 1,
                 child: IconButton(
-                  icon: Icon(
-                    favouriteProvider.isFavourite(productId)
-                        ? Icons.favorite
-                        : Icons.favorite_border,
-                    color: favouriteProvider.isFavourite(productId)
-                        ? Colors.red
-                        : Theme.of(context).colorScheme.secondary,
-                  ),
+                  icon: favouriteProvider.isProductLoading(productId)
+                      ? CupertinoActivityIndicator(
+                          color: Theme.of(context).colorScheme.secondary,
+                          radius: 10.r,
+                        ) // Display loading spinner if in progress
+                      : Icon(
+                          favouriteProvider.isFavourite(productId)
+                              ? Icons.favorite
+                              : Icons.favorite_border,
+                          color: favouriteProvider.isFavourite(productId)
+                              ? Colors.red
+                              : Theme.of(context).colorScheme.secondary,
+                        ),
                   onPressed: () {
                     // Toggle favorite status on button press
                     favouriteProvider.toggleFavourite(

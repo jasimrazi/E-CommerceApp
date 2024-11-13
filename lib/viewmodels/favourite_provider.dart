@@ -8,6 +8,7 @@ class FavouriteProvider with ChangeNotifier {
   List<int> favouriteProductIds = [];
   List<Product> favouriteProducts = [];
   bool isLoading = false;
+  int? loadingProductId; // Track the specific product ID being toggled
 
   FavouriteProvider() {
     _loadFavouriteProductIds();
@@ -16,6 +17,7 @@ class FavouriteProvider with ChangeNotifier {
   // Toggle the favourite status of a product
   Future<void> toggleFavourite(String loginid, int productid) async {
     isLoading = true;
+    loadingProductId = productid; // Set the loading product ID
     notifyListeners();
 
     try {
@@ -26,8 +28,6 @@ class FavouriteProvider with ChangeNotifier {
         favouriteProductIds.add(productid);
       } else if (message == "Product removed from favourites") {
         favouriteProductIds.remove(productid);
-        // Remove product from favouriteProducts list as well
-        favouriteProducts.removeWhere((product) => product.id == productid);
       }
 
       await _saveFavouriteProductIds();
@@ -35,8 +35,14 @@ class FavouriteProvider with ChangeNotifier {
       print("Error toggling favourite: $e");
     } finally {
       isLoading = false;
+      loadingProductId = null; // Clear the loading product ID
       notifyListeners();
     }
+  }
+
+  // Check if a product is currently being toggled
+  bool isProductLoading(int productid) {
+    return isLoading && loadingProductId == productid;
   }
 
   // Fetch all favourite products for the user
