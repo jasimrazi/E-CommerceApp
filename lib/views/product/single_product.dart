@@ -53,6 +53,7 @@ class _SingleProductState extends State<SingleProduct> {
     final productProvider = Provider.of<ProductProvider>(context);
     final reviewProvider = Provider.of<ReviewProvider>(context);
     final product = productProvider.product;
+     productProvider.productID = widget.productID;
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -215,7 +216,6 @@ class _SingleProductState extends State<SingleProduct> {
                                       ? Text(reviewProvider.errorMessage!)
                                       : Text('No reviews available.'),
                         ),
-
 
                         SizedBox(height: 30.h),
                       ],

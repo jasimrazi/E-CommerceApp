@@ -43,6 +43,9 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(
+                  height: 20.h,
+                ),
                 Text(
                   'Hello $name',
                   style: Theme.of(context)

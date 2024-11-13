@@ -43,7 +43,10 @@ class ReviewService {
         }),
       );
 
-      if (response.statusCode == 201) {
+      print(response.statusCode);
+      print(response.body);
+
+      if (response.statusCode == 200) {
         return 'Review posted successfully';
       } else {
         throw Exception('Failed to post review');

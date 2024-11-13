@@ -1,6 +1,8 @@
 import 'package:aami/viewmodels/review_provider.dart';
+import 'package:aami/views/review/addreview_page.dart';
 import 'package:aami/widgets/appbar.dart';
 import 'package:aami/widgets/cards/reviewcard.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -32,6 +34,11 @@ class AllReviewPage extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () {
                       // Define action for the button (e.g., navigate to review page)
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddReviewPage(),
+                          ));
                     },
                     style: ElevatedButton.styleFrom(
                       elevation: 0,
@@ -66,7 +73,7 @@ class AllReviewPage extends StatelessWidget {
               ),
               SizedBox(height: 16.0), // Add space between the row and the list
               Expanded(
-                child: ListView.builder(
+                child: reviewProvider.isLoading ? Center(child: CupertinoActivityIndicator()) : ListView.builder(
                   itemCount: reviewProvider.reviews.length,
                   itemBuilder: (context, index) {
                     return ReviewCard(review: reviewProvider.reviews[index]);

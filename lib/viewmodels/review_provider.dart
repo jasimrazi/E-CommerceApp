@@ -11,6 +11,9 @@ class ReviewProvider with ChangeNotifier {
   // Loading state for fetching reviews
   bool isLoading = false;
 
+  //Bool for checking if its coming from Post function
+  bool addReviewFetch = false;
+
   // Error message if fetching or posting fails
   String? errorMessage;
 
@@ -19,14 +22,16 @@ class ReviewProvider with ChangeNotifier {
   // Fetch reviews for a specific product
 
   Future<void> fetchReviews(int productId) async {
-    if (isLoading || hasFetchedReviews) return;
+    if ((isLoading || hasFetchedReviews) && !addReviewFetch) return;
 
     isLoading = true;
     errorMessage = null;
     notifyListeners();
 
     try {
+
       reviews = await reviewService.getReviews(productId);
+
       // Set hasFetchedReviews to true after the first attempt
       hasFetchedReviews = true;
     } catch (e) {
@@ -39,7 +44,6 @@ class ReviewProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-
 
   // Post a review for a specific product
   Future<void> postReview({
@@ -59,6 +63,10 @@ class ReviewProvider with ChangeNotifier {
         rating: rating,
         comment: comment,
       );
+
+      //set bool to true for second fetching
+      addReviewFetch = true;
+
       // After posting, fetch updated reviews
       await fetchReviews(productId);
     } catch (e) {

@@ -7,6 +7,7 @@ class ProductProvider with ChangeNotifier {
   List<Product> products = [];
   Product? product;
   bool isLoading = false;
+  int? productID;
 
   Future<void> fetchProducts() async {
     if (products.isNotEmpty) return; // Use cached data if available
