@@ -1,9 +1,11 @@
+import 'package:aami/utils/helper%20functions/pricecalculator.dart';
 import 'package:aami/viewmodels/auth_provider.dart';
 import 'package:aami/viewmodels/cart_provider.dart';
 import 'package:aami/widgets/appbar.dart';
 import 'package:aami/widgets/bottomnavbutton.dart';
 import 'package:aami/widgets/cards/addresscard.dart';
 import 'package:aami/widgets/cards/cartcard.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -27,17 +29,20 @@ class _CartPageState extends State<CartPage> {
     });
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
     // Fetch the CartProvider to get cart items
     final cartProvider = Provider.of<CartProvider>(context);
 
+    String subTotal =
+        priceCalculator(cartProvider.cartItems, cartProvider.productQuantities)
+            .toStringAsFixed(2);
+    double total = double.parse(subTotal) + 20;
+
     return SafeArea(
       child: Scaffold(
         body: cartProvider.isLoading
-            ? Center(child: CircularProgressIndicator())
+            ? Center(child: CupertinoActivityIndicator())
             : SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -60,10 +65,12 @@ class _CartPageState extends State<CartPage> {
                             price: cartProduct.price,
                             images: cartProduct.imageUrls,
                             size: cartProduct.size,
-                            quantity:  cartProvider.productQuantities[cartProduct.id] ??
-                                    1,
-                            onRemove: (){},
-                            onDecrease: () => cartProvider.decrementQuantity(cartProduct.id),
+                            quantity: cartProvider
+                                    .productQuantities[cartProduct.id] ??
+                                1,
+                            onRemove: () {},
+                            onDecrease: () =>
+                                cartProvider.decrementQuantity(cartProduct.id),
                             onIncrease: () =>
                                 cartProvider.incrementQuantity(cartProduct.id),
                           );
@@ -100,20 +107,45 @@ class _CartPageState extends State<CartPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
+                            'Subtotal',
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                          Text(
+                            '\$ $subTotal',
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Shipping',
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                          Text(
+                            '\$ 20',
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
                             'Total',
                             style: Theme.of(context).textTheme.bodyMedium,
                           ),
-                          // Text(
-                          //   cartProvider.cartItems
-                          //       .fold(
-                          //           0.0,
-                          //           (sum, item) =>
-                          //               sum +
-                          //               (double.tryParse(item.price) ?? 0) *
-                          //                   item.quantity)
-                          //       .toStringAsFixed(2),
-                          //   style: Theme.of(context).textTheme.bodySmall,
-                          // ),
+                          Text(
+                            '\$ ${total.toString()}',
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
                         ],
                       ),
                       SizedBox(
