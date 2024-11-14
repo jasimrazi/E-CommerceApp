@@ -11,8 +11,6 @@ class CartService {
     try {
       final response = await http.get(url);
 
-      print(response.statusCode);
-      print(response.body);
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body)['data'];

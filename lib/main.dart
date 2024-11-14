@@ -1,4 +1,5 @@
 import 'package:aami/utils/theme.dart';
+import 'package:aami/viewmodels/address_provider.dart';
 import 'package:aami/viewmodels/auth_provider.dart';
 import 'package:aami/viewmodels/cart_provider.dart';
 import 'package:aami/viewmodels/favourite_provider.dart';
@@ -37,6 +38,7 @@ class MainApp extends StatelessWidget {
         ), 
         ChangeNotifierProvider(create: (_) => SelectionProvider()),
         ChangeNotifierProvider(create: (_) => CartProvider()),
+        ChangeNotifierProvider(create: (_) => AddressProvider()),
       ],
       child: ScreenUtilInit(
         designSize:
