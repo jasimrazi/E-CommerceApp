@@ -3,6 +3,7 @@ import 'package:aami/viewmodels/address_provider.dart';
 import 'package:aami/viewmodels/auth_provider.dart';
 import 'package:aami/viewmodels/cart_provider.dart';
 import 'package:aami/viewmodels/favourite_provider.dart';
+import 'package:aami/viewmodels/order_provider.dart';
 import 'package:aami/viewmodels/product_provider.dart';
 import 'package:aami/viewmodels/selection_provider.dart';
 import 'package:aami/viewmodels/review_provider.dart';
@@ -10,7 +11,7 @@ import 'package:aami/views/auth/login_page.dart';
 import 'package:aami/views/home/bottom_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart'; // Import provider package
+import 'package:provider/provider.dart'; 
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,6 +40,7 @@ class MainApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => SelectionProvider()),
         ChangeNotifierProvider(create: (_) => CartProvider()),
         ChangeNotifierProvider(create: (_) => AddressProvider()),
+        ChangeNotifierProvider(create: (_) => OrderProvider()),
       ],
       child: ScreenUtilInit(
         designSize:

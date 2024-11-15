@@ -2,6 +2,7 @@ import 'package:aami/utils/helper%20functions/pricecalculator.dart';
 import 'package:aami/viewmodels/auth_provider.dart';
 import 'package:aami/viewmodels/cart_provider.dart';
 import 'package:aami/viewmodels/address_provider.dart';
+import 'package:aami/viewmodels/order_provider.dart';
 import 'package:aami/views/address/addaddress_page.dart';
 import 'package:aami/views/address/alladdress_page.dart';
 import 'package:aami/widgets/appbar.dart';
@@ -38,6 +39,8 @@ class _CartPageState extends State<CartPage> {
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
     final addressProvider = Provider.of<AddressProvider>(context);
+    final orderProvider = Provider.of<OrderProvider>(context);
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
     String subTotal =
         priceCalculator(cartProvider.cartItems, cartProvider.productQuantities)
@@ -58,29 +61,39 @@ class _CartPageState extends State<CartPage> {
                     ? Center(
                         child: CupertinoActivityIndicator(),
                       )
-                    : ListView.builder(
-                        padding: EdgeInsets.zero,
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: cartProvider.cartItems.length,
-                        itemBuilder: (context, index) {
-                          final cartProduct = cartProvider.cartItems[index];
-                          return CartCard(
-                            title: cartProduct.title,
-                            price: cartProduct.price,
-                            images: cartProduct.imageUrls,
-                            size: cartProduct.size,
-                            quantity: cartProvider
-                                    .productQuantities[cartProduct.id] ??
-                                1,
-                            onRemove: () {},
-                            onDecrease: () =>
-                                cartProvider.decrementQuantity(cartProduct.id),
-                            onIncrease: () =>
-                                cartProvider.incrementQuantity(cartProduct.id),
-                          );
-                        },
-                      ),
+                    : cartProvider.cartItems.isEmpty
+                        ? Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            child: Center(
+                              child: Text(
+                                'No items in cart',
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                            ),
+                          )
+                        : ListView.builder(
+                            padding: EdgeInsets.zero,
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: cartProvider.cartItems.length,
+                            itemBuilder: (context, index) {
+                              final cartProduct = cartProvider.cartItems[index];
+                              return CartCard(
+                                title: cartProduct.title,
+                                price: cartProduct.price,
+                                images: cartProduct.imageUrls,
+                                size: cartProduct.size,
+                                quantity: cartProvider
+                                        .productQuantities[cartProduct.id] ??
+                                    1,
+                                onRemove: () {},
+                                onDecrease: () => cartProvider
+                                    .decrementQuantity(cartProduct.id),
+                                onIncrease: () => cartProvider
+                                    .incrementQuantity(cartProduct.id),
+                              );
+                            },
+                          ),
 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -158,8 +171,42 @@ class _CartPageState extends State<CartPage> {
             ),
           ),
         ),
-        bottomNavigationBar:
-            CustomBottomNavButton(onTap: () {}, title: 'Checkout'),
+        bottomNavigationBar: CustomBottomNavButton(
+          onTap: () async {
+            try {
+              // Prepare the `orderItems`
+              final orderItems = cartProvider.cartItems.map((cartProduct) {
+                return {
+                  'product_id': cartProduct.id, // Product ID
+                  'quantity': cartProvider.productQuantities[cartProduct.id] ??
+                      1, // Quantity
+                  'price': cartProduct.price, // Price of the product
+                };
+              }).toList();
+
+              // Create the order
+              await orderProvider.createOrder(
+                context: context,
+                loginId: authProvider.loginId!,
+                shippingAddressId: addressProvider.selectedAddress!.id!,
+                orderItems: orderItems,
+                totalAmount: total.toString(),
+              );
+
+              // Show success message
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Order created successfully!')),
+              );
+            } catch (e) {
+              // Show error message
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(e.toString())),
+              );
+            }
+          },
+          title: 'Checkout',
+          isLoading: orderProvider.isLoading,
+        ),
       ),
     );
   }
