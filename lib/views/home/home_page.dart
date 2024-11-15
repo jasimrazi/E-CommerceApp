@@ -58,6 +58,7 @@ class _HomePageState extends State<HomePage> {
                   style: Theme.of(context).textTheme.bodySmall!,
                 ),
                 CustomSearchBar(
+                  isLoading: searchProvider.isSearchLoading,
                   onSearch: (query) async {
                     if (query.isNotEmpty) {
                       setState(() {
@@ -99,7 +100,11 @@ class _HomePageState extends State<HomePage> {
                     itemBuilder: (context, index) {
                       final suggestion = searchProvider.suggestions[index];
                       return ListTile(
-                        title: Text(suggestion),
+                        tileColor: Theme.of(context).colorScheme.surface,
+                        title: Text(
+                          suggestion,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
                         onTap: () async {
                           setState(() {
                             searchQuery = suggestion;

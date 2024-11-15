@@ -13,6 +13,7 @@ class ProductProvider with ChangeNotifier {
   List<String> suggestions = [];
   Product? product;
   bool isLoading = false;
+  bool isSearchLoading = false;
   String errorMessage = '';
   int? productID;
 
@@ -70,7 +71,7 @@ class ProductProvider with ChangeNotifier {
 
     debounce?.cancel();
     debounce = Timer(const Duration(milliseconds: 300), () async {
-      isLoading = true;
+      isSearchLoading = true;
       errorMessage = '';
       notifyListeners();
 
@@ -79,7 +80,7 @@ class ProductProvider with ChangeNotifier {
       } catch (e) {
         errorMessage = 'Failed to fetch suggestions: ${e.toString()}';
       } finally {
-        isLoading = false;
+        isSearchLoading = false;
         notifyListeners();
       }
     });
@@ -89,7 +90,7 @@ class ProductProvider with ChangeNotifier {
   Future<void> searchProducts(String query) async {
     if (query.isEmpty) return;
 
-    isLoading = true;
+    isSearchLoading = true;
     errorMessage = '';
     searchResults = [];
     notifyListeners();
@@ -99,7 +100,7 @@ class ProductProvider with ChangeNotifier {
     } catch (e) {
       errorMessage = 'Failed to search products: ${e.toString()}';
     } finally {
-      isLoading = false;
+      isSearchLoading = false;
       notifyListeners();
     }
   }
