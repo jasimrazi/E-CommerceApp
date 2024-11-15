@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 class CustomSearchBar extends StatelessWidget {
   final TextEditingController? controller;
-  final String hintText;
   final Function(String)? onSearch;
+  final Function(String)? onChanged;
 
   const CustomSearchBar({
     Key? key,
     this.controller,
-    this.hintText = 'Search...',
     this.onSearch,
+    this.onChanged,
   }) : super(key: key);
 
   @override
@@ -18,21 +18,20 @@ class CustomSearchBar extends StatelessWidget {
     final textColor = Theme.of(context).textTheme.bodyMedium?.color;
     final backgroundColor = Theme.of(context).colorScheme.surface;
 
-
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 20.0),
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       decoration: BoxDecoration(
-        color:
-            backgroundColor,
+        color: backgroundColor,
         borderRadius: BorderRadius.circular(10.0),
       ),
       child: TextField(
         controller: controller,
         onSubmitted: onSearch,
+        onChanged: onChanged,
         style: TextStyle(color: textColor),
         decoration: InputDecoration(
-          hintText: hintText,
+          hintText: 'Search...',
           hintStyle: TextStyle(color: iconColor),
           border: InputBorder.none,
           icon: Icon(Icons.search, color: iconColor),

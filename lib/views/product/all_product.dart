@@ -7,57 +7,70 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 class AllProduct extends StatelessWidget {
-  AllProduct({super.key});
+  final List<dynamic>? searchResults;
 
-  @override
+  AllProduct({Key? key, this.searchResults}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final productProvider = Provider.of<ProductProvider>(context);
-    final allProductData = productProvider.products;
+    final bool isSearchMode = searchResults != null;
+    final allProductData =
+        isSearchMode ? searchResults! : productProvider.products;
 
     return Scaffold(
       appBar: CustomAppbar(
-        title: 'All Products',
+        title: isSearchMode ? 'Search Results' : 'All Products',
       ),
-      body: productProvider.isLoading
+      body: productProvider.isLoading && !isSearchMode
           ? Center(child: CustomLoading())
-          : Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 30.h,
+          : allProductData.isEmpty
+              ? Center(
+                  child: Text(
+                    isSearchMode
+                        ? 'No products found for your search.'
+                        : 'No products available.',
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
-                  Expanded(
-                    child: GridView.builder(
-                      physics: BouncingScrollPhysics(),
-                      itemCount: allProductData.length,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2, // Number of columns in the grid
-                        childAspectRatio: 0.63, // Adjust aspect ratio as needed
-                        mainAxisSpacing: 15,
-                        crossAxisSpacing: 20,
-                      ),
-                      itemBuilder: (context, index) {
-                        final product = allProductData[index];
-                        final String imageUrl = product.images[0];
-                        final String title = product.title;
-                        final String price = product.price;
-                        final int id = product.id;
+                )
+              : Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    children: [
+                      SizedBox(height: 30.h),
+                      Expanded(
+                        child: GridView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: allProductData.length,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2, // Number of columns in the grid
+                            childAspectRatio:
+                                0.63, // Adjust aspect ratio as needed
+                            mainAxisSpacing: 15,
+                            crossAxisSpacing: 20,
+                          ),
+                          itemBuilder: (context, index) {
+                            final product = allProductData[index];
+                            final String imageUrl = product.images.isNotEmpty
+                                ? product.images[0]
+                                : 'https://via.placeholder.com/150';
+                            final String title = product.title;
+                            final String price = product.price;
+                            final int id = product.id;
 
-                        return ProductCard(
-                          productId: id,
-                          title: title,
-                          image: imageUrl,
-                          price: price,
-                        );
-                      },
-                    ),
+                            return ProductCard(
+                              productId: id,
+                              title: title,
+                              image: imageUrl,
+                              price: price,
+                            );
+                          },
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
+                ),
     );
   }
 }

@@ -18,34 +18,34 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String searchQuery = '';
+
   @override
   void initState() {
     super.initState();
-    // Fetch products when the page initializes
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<ProductProvider>(context, listen: false).fetchProducts();
     });
-    
   }
 
   @override
   Widget build(BuildContext context) {
-
-    final authProvider = Provider.of<AuthProvider>(context);
-    final  String name = authProvider.name!;
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final searchProvider = Provider.of<ProductProvider>(context);
+    final productProvider =
+        Provider.of<ProductProvider>(context, listen: false);
+    final String name = authProvider.name!;
 
     return SafeArea(
       child: Scaffold(
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  height: 20.h,
-                ),
+                SizedBox(height: 20.h),
                 Text(
                   'Hello $name',
                   style: Theme.of(context)
@@ -53,9 +53,70 @@ class _HomePageState extends State<HomePage> {
                       .bodyLarge!
                       .copyWith(fontSize: 28.sp),
                 ),
-                Text('Welcome to Aami Store',
-                    style: Theme.of(context).textTheme.bodySmall!),
-                CustomSearchBar(),
+                Text(
+                  'Welcome to Aami Store',
+                  style: Theme.of(context).textTheme.bodySmall!,
+                ),
+                CustomSearchBar(
+                  onSearch: (query) async {
+                    if (query.isNotEmpty) {
+                      setState(() {
+                        searchQuery = query;
+                      });
+                      await searchProvider.searchProducts(query);
+                      if (searchProvider.searchResults.isNotEmpty) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AllProduct(
+                              searchResults: searchProvider.searchResults,
+                            ),
+                          ),
+                        );
+                      }
+                    }
+                  },
+                  onChanged: (query) async {
+                    if (query.isNotEmpty) {
+                      setState(() {
+                        searchQuery = query;
+                      });
+                      await searchProvider.fetchSuggestions(query);
+                    } else {
+                      setState(() {
+                        searchQuery = '';
+                      });
+                      searchProvider.clearSearch();
+                    }
+                  },
+                ),
+                if (searchQuery.isNotEmpty &&
+                    searchProvider.suggestions.isNotEmpty)
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: searchProvider.suggestions.length,
+                    itemBuilder: (context, index) {
+                      final suggestion = searchProvider.suggestions[index];
+                      return ListTile(
+                        title: Text(suggestion),
+                        onTap: () async {
+                          setState(() {
+                            searchQuery = suggestion;
+                          });
+                          await searchProvider.searchProducts(suggestion);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AllProduct(
+                                searchResults: searchProvider.searchResults,
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -80,12 +141,10 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
                 SizedBox(height: 20.h),
-                // Wrap only GridView with Consumer
                 Consumer<ProductProvider>(
-                  builder: (context, productProvider, child) {
-                    // Display a loading indicator while loading, or a message if products are empty
+                  builder: (context, productProvider, _) {
                     if (productProvider.isLoading) {
-                      return Center(child: CupertinoActivityIndicator());
+                      return const Center(child: CupertinoActivityIndicator());
                     } else if (productProvider.products.isEmpty) {
                       return Center(
                         child: Text(
@@ -97,7 +156,7 @@ class _HomePageState extends State<HomePage> {
                       return GridView.builder(
                         padding: EdgeInsets.zero,
                         shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
+                        physics: const NeverScrollableScrollPhysics(),
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
@@ -110,7 +169,6 @@ class _HomePageState extends State<HomePage> {
                           final product = productProvider.products[index];
                           return GestureDetector(
                             onTap: () {
-                              print('HomePage: ProductID: ${product.id}');
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -125,7 +183,7 @@ class _HomePageState extends State<HomePage> {
                               price: product.price,
                               image: product.images.isNotEmpty
                                   ? product.images[0]
-                                  : 'https://via.placeholder.com/150', // Placeholder image if none exist
+                                  : 'https://via.placeholder.com/150',
                             ),
                           );
                         },
@@ -141,4 +199,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
