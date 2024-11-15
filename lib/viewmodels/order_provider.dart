@@ -11,9 +11,10 @@ class OrderProvider with ChangeNotifier {
 
   /// Fetch orders for the given login ID
   Future<void> fetchOrders(String loginId) async {
-    isLoading = true;
-    notifyListeners();
-
+    
+    if(orders.isEmpty){
+      isLoading = true;
+      notifyListeners();
     try {
       final fetchedOrders = await orderService.fetchOrders(loginId);
       orders = fetchedOrders;
@@ -23,6 +24,7 @@ class OrderProvider with ChangeNotifier {
     } finally {
       isLoading = false;
       notifyListeners();
+    }
     }
   }
 
@@ -50,6 +52,8 @@ class OrderProvider with ChangeNotifier {
 
       //if successfull clear the cart
       context.read<CartProvider>().clearCart();
+
+      await fetchOrders(loginId);
       notifyListeners();
     } catch (e) {
       rethrow;
