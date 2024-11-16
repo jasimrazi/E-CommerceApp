@@ -9,15 +9,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
-class SignupPage extends StatelessWidget {
+class SignupPage extends StatefulWidget {
   SignupPage({super.key});
 
+  @override
+  State<SignupPage> createState() => _SignupPageState();
+}
+
+class _SignupPageState extends State<SignupPage> {
   final TextEditingController emailController = TextEditingController();
+
   final TextEditingController nameController = TextEditingController();
+
   final TextEditingController passwordController = TextEditingController();
+
   final TextEditingController numberController = TextEditingController();
 
-  
+  @override
+  void dispose() {
+    emailController.dispose();
+    nameController.dispose();
+    passwordController.dispose();
+    numberController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +46,7 @@ class SignupPage extends StatelessWidget {
             children: [
               Center(
                 child: Container(
-                  margin: EdgeInsets.only(bottom: 100.h),
+                  margin: EdgeInsets.only(bottom: 75.h),
                   child: Column(
                     children: [
                       Text(
@@ -74,15 +89,19 @@ class SignupPage extends StatelessWidget {
                     style: Theme.of(context)
                         .textTheme
                         .bodySmall!
-                        .copyWith(color: Color(0xff1D1E20), fontSize: 13.sp),
+                        .copyWith(fontSize: 14.sp),
                   ),
-                  Transform.scale(
-                    scale: 0.7,
-                    child: CupertinoSwitch(
-                        value: true,
-                        onChanged: (value) {},
-                        activeColor: CupertinoColors.activeGreen),
-                  )
+                  Consumer<AuthProvider>(
+                    builder: (context, authProvider, _) {
+                      return CupertinoSwitch(
+                        value: authProvider.rememberMe,
+                        onChanged: (value) {
+                          authProvider.toggleLoggedState(value);
+                        },
+                        activeColor: CupertinoColors.activeGreen,
+                      );
+                    },
+                  ),
                 ],
               ),
               Spacer(),
@@ -109,8 +128,6 @@ class SignupPage extends StatelessWidget {
                     passwordController.text,
                     nameController.text,
                     numberController.text);
-
-                
 
                 Navigator.pushReplacement(
                     context,

@@ -1,23 +1,35 @@
 import 'package:aami/viewmodels/auth_provider.dart';
 import 'package:aami/views/auth/signup_page.dart';
-import 'package:aami/widgets/appbar.dart';
+import 'package:aami/views/home/bottom_navbar.dart';
 import 'package:aami/widgets/bottomnavbutton.dart';
 import 'package:aami/widgets/texfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:aami/views/home/bottom_navbar.dart';
 
-class LoginPage extends StatelessWidget {
-  LoginPage({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({Key? key}) : super(key: key);
 
-  // Create text controllers for username and password fields
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
   @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    print('rebuild occurs...');
+
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -30,9 +42,7 @@ class LoginPage extends StatelessWidget {
                   margin: EdgeInsets.only(bottom: 200.h),
                   child: Column(
                     children: [
-                      SizedBox(
-                        height: 30.h,
-                      ),
+                      SizedBox(height: 30.h),
                       Text(
                         'Welcome',
                         style: Theme.of(context)
@@ -59,9 +69,7 @@ class LoginPage extends StatelessWidget {
                 labelText: 'Password',
                 controller: passwordController,
               ),
-              SizedBox(
-                height: 15.h,
-              ),
+              SizedBox(height: 15.h),
               GestureDetector(
                 onTap: () {},
                 child: Align(
@@ -75,9 +83,7 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 25.h,
-              ),
+              SizedBox(height: 25.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -101,7 +107,7 @@ class LoginPage extends StatelessWidget {
                   ),
                 ],
               ),
-              Spacer(),
+              const Spacer(),
               GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -147,7 +153,9 @@ class LoginPage extends StatelessWidget {
                 );
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => BottomNavBarPage()),
+                  MaterialPageRoute(
+                    builder: (context) =>  BottomNavBarPage(),
+                  ),
                 );
               } catch (e) {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -156,7 +164,7 @@ class LoginPage extends StatelessWidget {
               }
             },
             title: 'Login',
-            isLoading: authProvider.isLoading, // Pass loading state
+            isLoading: authProvider.isLoading,
           ),
         ),
       ),
