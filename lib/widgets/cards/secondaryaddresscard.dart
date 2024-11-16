@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SecondaryAddressCard extends StatelessWidget {
@@ -94,7 +95,7 @@ class SecondaryAddressCard extends StatelessWidget {
               Icon(
                 Icons.check_circle,
                 color: isSelected
-                    ? Colors.green
+                    ? CupertinoColors.activeGreen
                     : Theme.of(context).colorScheme.secondary,
                 size: 24,
               ),

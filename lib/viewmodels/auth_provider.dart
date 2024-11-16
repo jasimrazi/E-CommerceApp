@@ -6,40 +6,37 @@ class AuthProvider extends ChangeNotifier {
   final AuthService authService = AuthService();
   String? loginId;
   String? name;
-  bool loading = false; // Loading state
-
-  bool get isAuthenticated => loginId != null;
+  bool isLoading = false; // Loading state
+  bool isLogged = false;
+  bool rememberMe = true;
 
   AuthProvider() {
-    _loadUserData();
+    loadUserData();
   }
 
   // Load user data from SharedPreferences
-  Future<void> _loadUserData() async {
+  Future<void> loadUserData() async {
     final prefs = await SharedPreferences.getInstance();
     loginId = prefs.getString('loginId');
     name = prefs.getString('name');
+    isLogged = prefs.getBool('isLogged') ?? false;
 
-    //Notify for getting the name in homepage
     notifyListeners();
-
-    bool isLogged = prefs.getBool('isLogged') ?? false;
-
-    if (isLogged && loginId != null) {
-      notifyListeners();
-    }
   }
 
   // Save user data in SharedPreferences
-  Future<void> _saveUserData(String loginId, String name) async {
+  Future<void> saveUserData(String loginId, String name) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('loginId', loginId);
     await prefs.setString('name', name);
-    await prefs.setBool('isLogged', true);
+
+    if (rememberMe) {
+  await prefs.setBool('isLogged', true);
+}
   }
 
   // Clear user data from SharedPreferences
-  Future<void> _clearUserData() async {
+  Future<void> clearUserData() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('loginId');
     await prefs.remove('name');
@@ -48,21 +45,20 @@ class AuthProvider extends ChangeNotifier {
 
   // Set loading state
   void setLoading(bool value) {
-    loading = value;
+    isLoading = value;
     notifyListeners();
   }
 
-  // Login method with error handling and rethrow
+  // Login method with error handling
   Future<void> login(String email, String password) async {
     setLoading(true); // Start loading
     try {
       final response = await authService.login(email, password);
-
       loginId = response['data']['loginid'];
       name = response['data']['name'];
-      await _saveUserData(loginId!, name!);
+      await saveUserData(loginId!, name!);
+      isLogged = true;
     } catch (error) {
-      // Log error for debugging if needed
       print('Login error: $error');
       rethrow; // Pass the error to UI layer
     } finally {
@@ -70,15 +66,16 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  // Signup method with error handling and rethrow
+  // Signup method with error handling
   Future<void> signup(
       String email, String password, String name, String number) async {
     setLoading(true); // Start loading
     try {
       final response = await authService.signup(email, password, name, number);
       loginId = response['data']['loginid'];
-      name = response['data']['name'];
-      await _saveUserData(loginId!, name!);
+      this.name = response['data']['name'];
+      await saveUserData(loginId!, this.name!);
+      isLogged = true;
     } catch (error) {
       print('Signup error: $error');
       rethrow; // Pass the error to UI layer
@@ -93,11 +90,18 @@ class AuthProvider extends ChangeNotifier {
     try {
       loginId = null;
       name = null;
-      await _clearUserData();
-    } catch (e) {
+      isLogged = false;
+      await clearUserData();
+    } catch (error) {
       rethrow;
     } finally {
       setLoading(false); // Stop loading
     }
+  }
+
+  // Toggle logged state
+  Future<void> toggleLoggedState(bool value) async {
+    rememberMe = value; // Update the rememberMe variable
+    notifyListeners(); // Notify listeners to update the UI
   }
 }

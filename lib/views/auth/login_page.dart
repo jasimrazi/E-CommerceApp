@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:aami/views/home/bottom_navbar.dart';
 
 class LoginPage extends StatelessWidget {
-   LoginPage({super.key});
+  LoginPage({super.key});
 
   // Create text controllers for username and password fields
   final TextEditingController emailController = TextEditingController();
@@ -18,8 +18,6 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
-
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -88,15 +86,18 @@ class LoginPage extends StatelessWidget {
                     style: Theme.of(context)
                         .textTheme
                         .bodySmall!
-                        .copyWith(fontSize: 13.sp),
+                        .copyWith(fontSize: 14.sp),
                   ),
-                  Transform.scale(
-                    scale: 0.7,
-                    child: CupertinoSwitch(
-                      value: true,
-                      onChanged: (value) {},
-                      activeColor: CupertinoColors.activeGreen,
-                    ),
+                  Consumer<AuthProvider>(
+                    builder: (context, authProvider, _) {
+                      return CupertinoSwitch(
+                        value: authProvider.rememberMe,
+                        onChanged: (value) {
+                          authProvider.toggleLoggedState(value);
+                        },
+                        activeColor: CupertinoColors.activeGreen,
+                      );
+                    },
                   ),
                 ],
               ),
@@ -155,7 +156,7 @@ class LoginPage extends StatelessWidget {
               }
             },
             title: 'Login',
-            isLoading: authProvider.loading, // Pass loading state
+            isLoading: authProvider.isLoading, // Pass loading state
           ),
         ),
       ),

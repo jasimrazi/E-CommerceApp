@@ -124,7 +124,7 @@ class SignupPage extends StatelessWidget {
               }
             },
             title: 'Sign Up',
-            isLoading: authProvider.loading,
+            isLoading: authProvider.isLoading,
           );
         }),
       ),

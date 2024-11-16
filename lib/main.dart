@@ -11,7 +11,7 @@ import 'package:aami/views/auth/login_page.dart';
 import 'package:aami/views/home/bottom_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart'; 
+import 'package:provider/provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,16 +27,16 @@ class MainApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (_) => AuthProvider(),
-        ), 
+        ),
         ChangeNotifierProvider(
           create: (_) => ProductProvider(),
-        ), 
+        ),
         ChangeNotifierProvider(
           create: (_) => FavouriteProvider(),
-        ), 
+        ),
         ChangeNotifierProvider(
           create: (_) => ReviewProvider(),
-        ), 
+        ),
         ChangeNotifierProvider(create: (_) => SelectionProvider()),
         ChangeNotifierProvider(create: (_) => CartProvider()),
         ChangeNotifierProvider(create: (_) => AddressProvider()),
@@ -57,7 +57,7 @@ class MainApp extends StatelessWidget {
                 themeMode: ThemeMode
                     .system, // Automatically choose light or dark based on system preference
                 home: authProvider
-                        .isAuthenticated // If logged in, go to HomePage else LoginPage
+                        .isLogged // If logged in, go to HomePage else LoginPage
                     ? BottomNavBarPage()
                     : LoginPage(),
               );
