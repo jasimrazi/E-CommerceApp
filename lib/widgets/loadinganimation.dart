@@ -7,8 +7,8 @@ class CustomLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SpinKitThreeBounce(
-      color: Theme.of(context).colorScheme.secondary,
+    return SpinKitChasingDots(
+      color: Colors.white,
       size: 25,
     );
   }

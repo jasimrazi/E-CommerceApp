@@ -1,3 +1,4 @@
+import 'package:aami/widgets/loadinganimation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -27,10 +28,7 @@ class CustomBottomNavButton extends StatelessWidget {
         child: isLoading
             ? Column(
                 children: [
-                  SpinKitThreeBounce(
-                    color: Colors.white,
-                    size: 25.0,
-                  ),
+                  CustomLoading(),
                   SizedBox(
                     height: 10.h,
                   )

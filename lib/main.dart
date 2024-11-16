@@ -9,6 +9,7 @@ import 'package:aami/viewmodels/selection_provider.dart';
 import 'package:aami/viewmodels/review_provider.dart';
 import 'package:aami/views/auth/login_page.dart';
 import 'package:aami/views/home/bottom_navbar.dart';
+import 'package:aami/views/splash/splash_screen.dart'; // Add your Splash Screen import
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -47,21 +48,13 @@ class MainApp extends StatelessWidget {
             const Size(375, 812), // Set based on your design's base resolution
         minTextAdapt: true,
         builder: (context, child) {
-          return Consumer<AuthProvider>(
-            // Consumer to watch for changes in AuthProvider
-            builder: (context, authProvider, _) {
-              return MaterialApp(
-                debugShowCheckedModeBanner: false,
-                theme: lightTheme, // Light theme
-                darkTheme: darkTheme, // Dark theme
-                themeMode: ThemeMode
-                    .system, // Automatically choose light or dark based on system preference
-                home: authProvider
-                        .isLogged // If logged in, go to HomePage else LoginPage
-                    ? BottomNavBarPage()
-                    : LoginPage(),
-              );
-            },
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: lightTheme, // Light theme
+            darkTheme: darkTheme, // Dark theme
+            themeMode: ThemeMode
+                .system, // Automatically choose light or dark based on system preference
+            home: const SplashScreen(),
           );
         },
       ),
