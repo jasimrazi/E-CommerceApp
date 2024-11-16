@@ -65,10 +65,9 @@ class _SingleProductState extends State<SingleProduct> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: CustomAppbar(isCart: true),
+      appBar: CustomAppbar(),
       body: productProvider.isLoading
-          ? const Center(
-               child:  CupertinoActivityIndicator())
+          ? const Center(child: CupertinoActivityIndicator())
           : product == null
               ? Center(child: Text('Product not found'))
               : Padding(
@@ -267,7 +266,10 @@ class _SingleProductState extends State<SingleProduct> {
               );
             } else {
               try {
-                final response = await cartProvider.addToCart(authProvider.loginId!, productProvider.productID!, selectionProvider.selectedSize!);
+                final response = await cartProvider.addToCart(
+                    authProvider.loginId!,
+                    productProvider.productID!,
+                    selectionProvider.selectedSize!);
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text(response)),
                 );

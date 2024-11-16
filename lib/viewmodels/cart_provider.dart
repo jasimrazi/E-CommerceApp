@@ -7,25 +7,30 @@ class CartProvider with ChangeNotifier {
   List<CartProduct> cartItems = [];
   Map<int, int> productQuantities = {}; // Mapping of product IDs to quantities
   bool isLoading = false;
+  bool fetchTrigger = false;
 
   // Fetch cart items for a user
   Future<void> fetchCart(String loginId) async {
-    isLoading = true;
-    notifyListeners();
-    try {
-      cartItems = await cartService.fetchCart(loginId);
-    } catch (e) {
-      print("Error fetching cart: $e");
-      cartItems = [];
-    } finally {
-      isLoading = false;
+    if (fetchTrigger) {
+      isLoading = true;
       notifyListeners();
+      try {
+        cartItems = await cartService.fetchCart(loginId);
+      } catch (e) {
+        print("Error fetching cart: $e");
+        cartItems = [];
+      } finally {
+        isLoading = false;
+        fetchTrigger = false;
+        notifyListeners();
+      }
     }
   }
 
   // Add a product to the cart
   Future<String> addToCart(String loginId, int productId, String size) async {
     isLoading = true;
+    fetchTrigger = true;
     notifyListeners();
     try {
       final message = await cartService.addToCart(loginId, productId, size);
@@ -40,7 +45,7 @@ class CartProvider with ChangeNotifier {
     }
   }
 
-   // Increment quantity for a specific product
+  // Increment quantity for a specific product
   void incrementQuantity(int productId) {
     productQuantities[productId] = (productQuantities[productId] ?? 1) + 1;
     notifyListeners();

@@ -8,6 +8,7 @@ class FavouriteProvider with ChangeNotifier {
   List<int> favouriteProductIds = [];
   List<Product> favouriteProducts = [];
   bool isLoading = false;
+  bool fetchTrigger = false;
   int? loadingProductId; // Track the specific product ID being toggled
 
   FavouriteProvider() {
@@ -17,17 +18,18 @@ class FavouriteProvider with ChangeNotifier {
   // Toggle the favourite status of a product
   Future<void> toggleFavourite(String loginid, int productid) async {
     isLoading = true;
+    fetchTrigger = true;
     loadingProductId = productid; // Set the loading product ID
     notifyListeners();
 
     try {
       final message = await favouritesService.addToFav(loginid, productid);
-      print(message);
 
       if (message == "Product added to favourites") {
         favouriteProductIds.add(productid);
       } else if (message == "Product removed from favourites") {
         favouriteProductIds.remove(productid);
+        favouriteProducts.removeWhere((product) => product.id == productid);
       }
 
       await _saveFavouriteProductIds();
@@ -47,22 +49,25 @@ class FavouriteProvider with ChangeNotifier {
 
   // Fetch all favourite products for the user
   Future<void> fetchFavouriteProducts(String loginid) async {
-    isLoading = true;
-    notifyListeners();
-
-    try {
-      await _loadFavouriteProductIds();
-      favouriteProducts = await favouritesService.fetchFavourites(loginid);
-
-      // Ensure favourite IDs align with fetched products
-      favouriteProductIds =
-          favouriteProducts.map((product) => product.id).toList();
-      await _saveFavouriteProductIds();
-    } catch (e) {
-      print("Error fetching favourite products: $e");
-    } finally {
-      isLoading = false;
+    if (fetchTrigger) {
+      isLoading = true;
       notifyListeners();
+      try {
+        await _loadFavouriteProductIds();
+        favouriteProducts = await favouritesService.fetchFavourites(loginid);
+
+        // Ensure favourite IDs align with fetched products
+        favouriteProductIds =
+            favouriteProducts.map((product) => product.id).toList();
+        await _saveFavouriteProductIds();
+      } catch (e) {
+        print("Error fetching favourite products: $e");
+      } finally {
+        isLoading = false;
+        fetchTrigger = false;
+
+        notifyListeners();
+      }
     }
   }
 
@@ -82,6 +87,7 @@ class FavouriteProvider with ChangeNotifier {
 
   // Load favourite product IDs from SharedPreferences
   Future<void> _loadFavouriteProductIds() async {
+    fetchTrigger = true;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String>? savedIds = prefs.getStringList('favouriteProductIds');
     if (savedIds != null) {
