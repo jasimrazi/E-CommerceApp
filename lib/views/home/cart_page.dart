@@ -9,6 +9,8 @@ import 'package:aami/widgets/appbar.dart';
 import 'package:aami/widgets/bottomnavbutton.dart';
 import 'package:aami/widgets/cards/addresscard.dart';
 import 'package:aami/widgets/cards/cartcard.dart';
+import 'package:aami/widgets/loading%20cards/Laddresscard.dart';
+import 'package:aami/widgets/loading%20cards/Lcartcard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -58,8 +60,12 @@ class _CartPageState extends State<CartPage> {
                 SizedBox(height: 30.h),
 
                 cartProvider.isLoading
-                    ? Center(
-                        child: CupertinoActivityIndicator(),
+                    ? ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: 2, // Number of loading placeholders
+                        itemBuilder: (context, index) {
+                          return const LoadingCartCard();
+                        },
                       )
                     : cartProvider.cartItems.isEmpty
                         ? Padding(
@@ -116,9 +122,7 @@ class _CartPageState extends State<CartPage> {
 
                 // Display first address, if available
                 addressProvider.isLoading
-                    ? Center(
-                        child: CupertinoActivityIndicator(),
-                      )
+                    ? LoadingAddressCard()
                     : addressProvider.addresses.isNotEmpty
                         ? AddressCard(
                             city: addressProvider.selectedAddress!.city,

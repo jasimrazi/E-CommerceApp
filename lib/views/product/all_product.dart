@@ -1,6 +1,7 @@
 import 'package:aami/viewmodels/product_provider.dart';
 import 'package:aami/widgets/appbar.dart';
 import 'package:aami/widgets/cards/productcard.dart';
+import 'package:aami/widgets/loading%20cards/Lproductcard.dart';
 import 'package:aami/widgets/loadinganimation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -23,7 +24,25 @@ class AllProduct extends StatelessWidget {
         title: isSearchMode ? 'Search Results' : 'All Products',
       ),
       body: productProvider.isLoading && !isSearchMode
-          ? Center(child: CustomLoading())
+          ? Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: GridView.builder(
+                            physics: const BouncingScrollPhysics(),
+                            itemCount: 4,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2, // Number of columns in the grid
+                              childAspectRatio:
+                                  0.63, // Adjust aspect ratio as needed
+                              mainAxisSpacing: 15,
+                              crossAxisSpacing: 20,
+                            ),
+                            itemBuilder: (context, index) {
+                              return LoadingProductCard(
+                              );
+                            },
+                          ),
+          )
           : allProductData.isEmpty
               ? Center(
                   child: Text(

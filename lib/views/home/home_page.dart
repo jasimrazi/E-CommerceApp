@@ -3,6 +3,7 @@ import 'package:aami/viewmodels/product_provider.dart';
 import 'package:aami/views/product/all_product.dart';
 import 'package:aami/views/product/single_product.dart';
 import 'package:aami/widgets/cards/productcard.dart';
+import 'package:aami/widgets/loading%20cards/Lproductcard.dart';
 import 'package:aami/widgets/loadinganimation.dart';
 import 'package:aami/widgets/searchbar.dart';
 import 'package:flutter/cupertino.dart';
@@ -149,7 +150,23 @@ class _HomePageState extends State<HomePage> {
                 Consumer<ProductProvider>(
                   builder: (context, productProvider, _) {
                     if (productProvider.isLoading) {
-                      return const Center(child: CupertinoActivityIndicator());
+                      return GridView.builder(
+                        padding: EdgeInsets.zero,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 0.65,
+                          crossAxisSpacing: 15,
+                          mainAxisSpacing: 5,
+                        ),
+                        itemCount: 4,
+                        itemBuilder: (context, index) {
+                          return LoadingProductCard(
+                          );
+                        },
+                      );
                     } else if (productProvider.products.isEmpty) {
                       return Center(
                         child: Text(
@@ -169,7 +186,7 @@ class _HomePageState extends State<HomePage> {
                           crossAxisSpacing: 15,
                           mainAxisSpacing: 20,
                         ),
-                        itemCount: productProvider.products.length,
+                        itemCount: productProvider.products.take(4).length,
                         itemBuilder: (context, index) {
                           final product = productProvider.products[index];
                           return GestureDetector(

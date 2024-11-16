@@ -9,6 +9,7 @@ import 'package:aami/widgets/bottomnavbutton.dart';
 import 'package:aami/widgets/cards/imagecard.dart';
 import 'package:aami/widgets/cards/reviewcard.dart';
 import 'package:aami/widgets/cards/sizecard.dart';
+import 'package:aami/widgets/loading%20cards/Lreviewcard.dart';
 import 'package:aami/widgets/loadinganimation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -66,11 +67,8 @@ class _SingleProductState extends State<SingleProduct> {
       extendBodyBehindAppBar: true,
       appBar: CustomAppbar(isCart: true),
       body: productProvider.isLoading
-          ? Center(
-              child: Scaffold(
-                body: Center(child: CupertinoActivityIndicator()),
-              ),
-            )
+          ? const Center(
+               child:  CupertinoActivityIndicator())
           : product == null
               ? Center(child: Text('Product not found'))
               : Padding(
@@ -246,7 +244,7 @@ class _SingleProductState extends State<SingleProduct> {
                             }
                           },
                           child: reviewProvider.isLoading
-                              ? Center(child: CupertinoActivityIndicator())
+                              ? LoadingReviewCard()
                               : reviewProvider.reviews.isNotEmpty
                                   ? ReviewCard(
                                       review: reviewProvider.reviews.first)

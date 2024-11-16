@@ -2,6 +2,7 @@ import 'package:aami/viewmodels/address_provider.dart';
 import 'package:aami/views/address/addaddress_page.dart';
 import 'package:aami/widgets/appbar.dart';
 import 'package:aami/widgets/cards/secondaryaddresscard.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,7 +16,7 @@ class AllAddresses extends StatelessWidget {
         title: 'All Addresses',
       ),
       body: addressProvider.isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? Center(child: CupertinoActivityIndicator())
           : Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),
               child: ListView.builder(

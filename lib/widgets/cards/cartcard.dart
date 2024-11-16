@@ -36,15 +36,21 @@ class CartCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Display the first image
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8.0),
-              child: Image.network(
-                images.isNotEmpty ? images[0] : '',
-                height: 100.0.h, // Adjust height to match card height
-                width: 100.0.w,
-                fit: BoxFit.contain,
-              ),
+            // Image filling the top-to-bottom space
+            Column(
+              children: [
+                SizedBox(
+                  height: 100.0.h, // Set card height
+                  width: 100.0.w, // Set card width
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: Image.network(
+                      images.isNotEmpty ? images[0] : '',
+                      fit: BoxFit.contain, // Fill top-to-bottom space
+                    ),
+                  ),
+                ),
+              ],
             ),
             SizedBox(width: 16.0),
             Expanded(
@@ -63,37 +69,33 @@ class CartCard extends StatelessWidget {
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   SizedBox(height: 8.0),
-                  Text(
-                    'Size: $size', // Display size
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                  SizedBox(height: 8.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Quantity control buttons
+                      Text(
+                        'Size: $size', // Display size
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          IconButton(
-                            onPressed: onDecrease,
-                            icon: Icon(Icons.keyboard_arrow_down),
+                          GestureDetector(
+                            onTap: onDecrease,
+                            child: Icon(Icons.keyboard_arrow_down),
                           ),
-                          Text(
-                            '$quantity',
-                            style: Theme.of(context).textTheme.bodyMedium,
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 12.0),
+                            child: Text(
+                              '$quantity',
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
                           ),
-                          IconButton(
-                            onPressed: onIncrease,
-                            icon: Icon(Icons.keyboard_arrow_up),
+                          GestureDetector(
+                            onTap: onIncrease,
+                            child: Icon(Icons.keyboard_arrow_up),
                           ),
                         ],
-                      ),
-                      IconButton(
-                        onPressed: onRemove, // Handle remove action
-                        icon: Icon(
-                          Icons.delete_outline,
-                          color: Colors.redAccent,
-                        ),
                       ),
                     ],
                   ),

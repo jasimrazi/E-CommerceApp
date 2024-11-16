@@ -10,6 +10,7 @@ class ProductCard extends StatelessWidget {
   final String title;
   final String price;
   final String image;
+  final bool isLoading;
 
   const ProductCard({
     super.key,
@@ -17,6 +18,7 @@ class ProductCard extends StatelessWidget {
     required this.title,
     required this.price,
     required this.image,
+    this.isLoading = false,
   });
 
   @override

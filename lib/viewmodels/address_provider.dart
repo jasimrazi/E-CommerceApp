@@ -12,10 +12,11 @@ class AddressProvider with ChangeNotifier {
 
   // Fetch addresses for a user
   Future<void> fetchAddresses(String loginId) async {
-    isLoading = true;
-    errorMessage = '';
-    notifyListeners();
+    
     if (addresses.isEmpty || fetchTrigger) {
+      isLoading = true;
+      errorMessage = '';
+      notifyListeners();
       try {
         addresses = await addressService.fetchAddresses(loginId);
 

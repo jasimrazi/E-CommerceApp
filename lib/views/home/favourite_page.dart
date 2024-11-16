@@ -1,6 +1,7 @@
 import 'package:aami/viewmodels/auth_provider.dart';
 import 'package:aami/viewmodels/favourite_provider.dart';
 import 'package:aami/widgets/cards/productcard.dart';
+import 'package:aami/widgets/loading%20cards/Lproductcard.dart';
 import 'package:aami/widgets/loadinganimation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +42,23 @@ class _FavouritePageState extends State<FavouritePage> {
                 builder: (context, favouriteProvider, child) {
                   // Display loading indicator if data is still loading
                   if (favouriteProvider.isLoading) {
-                    return Center(child: CupertinoActivityIndicator());
+                    return GridView.builder(
+                      shrinkWrap: true,
+                      physics: BouncingScrollPhysics(),
+                      itemCount: 4,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2, // Number of columns in the grid
+                        childAspectRatio: 0.63, // Adjust aspect ratio as needed
+                        mainAxisSpacing: 15,
+                        crossAxisSpacing: 20,
+                      ),
+                      itemBuilder: (context, index) {
+                        return LoadingProductCard(
+                        );
+                      },
+                    );
+                    
                   }
 
                   // If no favourites are available, display a placeholder message
