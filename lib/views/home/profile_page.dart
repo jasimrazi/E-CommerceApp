@@ -1,4 +1,5 @@
 import 'package:aami/viewmodels/auth_provider.dart';
+import 'package:aami/views/address/alladdress_page.dart';
 import 'package:aami/views/auth/login_page.dart';
 import 'package:aami/views/home/orders_page.dart';
 import 'package:aami/widgets/bottomnavbutton.dart';
@@ -33,7 +34,7 @@ class ProfilePage extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             ListTile(
-              leading: const Icon(Icons.shopping_bag),
+              leading: const Icon(Icons.list_alt_outlined),
               title: Text(
                 'View Orders',
                 style: Theme.of(context).textTheme.bodyMedium,
@@ -49,48 +50,55 @@ class ProfilePage extends StatelessWidget {
               color: Theme.of(context).colorScheme.secondary,
             ),
             ListTile(
-              leading: const Icon(Icons.edit),
+              leading: const Icon(Icons.import_contacts_outlined),
               title: Text(
-                'Edit Profile',
+                'All Address',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AllAddresses()),
+                );
+              },
             ),
             Divider(
               color: Theme.of(context).colorScheme.secondary,
             ),
             ListTile(
-              leading: const Icon(Icons.lock),
-              title: Text(
-                'Change Password',
-                style: Theme.of(context).textTheme.bodyMedium,
+              leading: const Icon(
+                Icons.logout_outlined,
+                color: Colors.redAccent,
               ),
-              onTap: () {},
+              title: Text(
+                'Logout',
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(color: Colors.redAccent),
+              ),
+              onTap: () async {
+                try {
+                  await authProvider.logout();
+                  if (context.mounted) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginPage()),
+                    );
+                  }
+                } catch (e) {
+                  // Display the error message in a SnackBar
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(e.toString())),
+                  );
+                }
+              },
             ),
             Divider(
               color: Theme.of(context).colorScheme.secondary,
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: CustomBottomNavButton(
-        onTap: () async {
-          try {
-            await authProvider.logout();
-            if (context.mounted) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => LoginPage()),
-              );
-            }
-          } catch (e) {
-            // Display the error message in a SnackBar
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(e.toString())),
-            );
-          }
-        },
-        title: 'Log Out',
       ),
     );
   }
