@@ -10,7 +10,6 @@ import 'package:aami/widgets/cards/imagecard.dart';
 import 'package:aami/widgets/cards/reviewcard.dart';
 import 'package:aami/widgets/cards/sizecard.dart';
 import 'package:aami/widgets/loading%20cards/Lreviewcard.dart';
-import 'package:aami/widgets/loadinganimation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

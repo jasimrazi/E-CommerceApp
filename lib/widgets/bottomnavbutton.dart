@@ -2,7 +2,6 @@ import 'package:aami/widgets/loadinganimation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class CustomBottomNavButton extends StatelessWidget {
   final VoidCallback onTap;

@@ -18,7 +18,6 @@ class CustomSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final iconColor = Theme.of(context).colorScheme.onSurface.withOpacity(0.5);
-    final textColor = Theme.of(context).textTheme.bodyMedium?.color;
     final backgroundColor = Theme.of(context).colorScheme.surface;
 
     return Container(

@@ -16,14 +16,20 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 2), () {
-      final isLogged =
-          Provider.of<AuthProvider>(context, listen: false).isLogged;
+    Future.delayed(const Duration(seconds: 2), () async {
+      print('Loading user data...');
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
+      // Await loading user data
+      await authProvider.loadUserData();
+
+      // Check the isLogged state and navigate accordingly
+      print('isLogged state: ${authProvider.isLogged}');
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) =>
-              isLogged ? BottomNavBarPage() : LoginPage(),
+              authProvider.isLogged ? BottomNavBarPage() : LoginPage(),
         ),
       );
     });
@@ -34,9 +40,8 @@ class _SplashScreenState extends State<SplashScreen> {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDarkMode
-          ? Color(0xff1B262C)
-          : Theme.of(context).primaryColor,
+      backgroundColor:
+          isDarkMode ? Color(0xff1B262C) : Theme.of(context).primaryColor,
       body: Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

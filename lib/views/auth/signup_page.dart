@@ -1,5 +1,4 @@
 import 'package:aami/viewmodels/auth_provider.dart';
-import 'package:aami/views/auth/login_page.dart';
 import 'package:aami/views/home/bottom_navbar.dart';
 import 'package:aami/widgets/appbar.dart';
 import 'package:aami/widgets/bottomnavbutton.dart';

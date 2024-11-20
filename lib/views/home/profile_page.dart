@@ -2,7 +2,6 @@ import 'package:aami/viewmodels/auth_provider.dart';
 import 'package:aami/views/address/alladdress_page.dart';
 import 'package:aami/views/auth/login_page.dart';
 import 'package:aami/views/home/orders_page.dart';
-import 'package:aami/widgets/bottomnavbutton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';

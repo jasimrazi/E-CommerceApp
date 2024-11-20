@@ -2,7 +2,6 @@ import 'package:aami/viewmodels/auth_provider.dart';
 import 'package:aami/viewmodels/favourite_provider.dart';
 import 'package:aami/widgets/cards/productcard.dart';
 import 'package:aami/widgets/loading%20cards/Lproductcard.dart';
-import 'package:aami/widgets/loadinganimation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

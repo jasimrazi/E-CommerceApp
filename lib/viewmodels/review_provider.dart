@@ -57,7 +57,7 @@ class ReviewProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await reviewService.postReview(
+      await reviewService.postReview(
         productId: productId,
         loginId: loginId,
         rating: rating,

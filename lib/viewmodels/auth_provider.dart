@@ -19,7 +19,10 @@ class AuthProvider extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     loginId = prefs.getString('loginId');
     name = prefs.getString('name');
+    print('load user data: ${prefs.getBool('isLogged')}');
     isLogged = prefs.getBool('isLogged') ?? false;
+    print('load user data: isLogged:  ${isLogged}');
+    
 
     notifyListeners();
   }
@@ -30,9 +33,10 @@ class AuthProvider extends ChangeNotifier {
     await prefs.setString('loginId', loginId);
     await prefs.setString('name', name);
 
+    print('save user data: ${rememberMe}');
     if (rememberMe) {
-  await prefs.setBool('isLogged', true);
-}
+      await prefs.setBool('isLogged', true);
+    }
   }
 
   // Clear user data from SharedPreferences

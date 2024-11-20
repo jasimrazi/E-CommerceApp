@@ -33,16 +33,25 @@ class AuthService {
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
-        body: json.encode(
-            {'email': email, 'password': password, 'name': name, 'number': number}),
+        body: json.encode({
+          'email': email,
+          'password': password,
+          'name': name,
+          'number': number
+        }),
       );
 
+      print(response.statusCode);
+      print(response.body);
 
       if (response.statusCode == 200) {
         return json.decode(response.body);
+      } else if(response.statusCode == 400){
+        final Map<String, dynamic> errorData = json.decode(response.body);
+        throw Exception(errorData['Errors'] ?? 'Failed to sign up');
       } else {
         final Map<String, dynamic> errorData = json.decode(response.body);
-        throw Exception(errorData['message'] ?? 'Failed to sign up');
+        throw Exception(errorData['Message'] ?? 'Failed to sign up');
       }
     } catch (error) {
       rethrow; // Rethrow the error for handling in AuthProvider

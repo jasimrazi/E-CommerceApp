@@ -7,9 +7,7 @@ import 'package:aami/viewmodels/order_provider.dart';
 import 'package:aami/viewmodels/product_provider.dart';
 import 'package:aami/viewmodels/selection_provider.dart';
 import 'package:aami/viewmodels/review_provider.dart';
-import 'package:aami/views/auth/login_page.dart';
-import 'package:aami/views/home/bottom_navbar.dart';
-import 'package:aami/views/splash/splash_screen.dart'; // Add your Splash Screen import
+import 'package:aami/views/splash/splash_screen.dart'; 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';

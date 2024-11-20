@@ -4,7 +4,6 @@ import 'package:aami/views/product/all_product.dart';
 import 'package:aami/views/product/single_product.dart';
 import 'package:aami/widgets/cards/productcard.dart';
 import 'package:aami/widgets/loading%20cards/Lproductcard.dart';
-import 'package:aami/widgets/loadinganimation.dart';
 import 'package:aami/widgets/searchbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -33,8 +32,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final searchProvider = Provider.of<ProductProvider>(context);
-    final productProvider =
-        Provider.of<ProductProvider>(context, listen: false);
     final String name = authProvider.name!;
 
     return SafeArea(
