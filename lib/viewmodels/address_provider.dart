@@ -12,7 +12,6 @@ class AddressProvider with ChangeNotifier {
 
   // Fetch addresses for a user
   Future<void> fetchAddresses(String loginId) async {
-    
     if (addresses.isEmpty || fetchTrigger) {
       isLoading = true;
       errorMessage = '';
@@ -29,13 +28,14 @@ class AddressProvider with ChangeNotifier {
         addresses = [];
       } finally {
         isLoading = false;
+        fetchTrigger = false;
         notifyListeners();
       }
     }
   }
 
   // Add a new address for a user
-   Future<String> addAddress(String loginId, Address address) async {
+  Future<String> addAddress(String loginId, Address address) async {
     isLoading = true;
     notifyListeners();
     try {
@@ -56,7 +56,6 @@ class AddressProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-
 
   // Change the selected address based on the address ID
   void selectAddress(int? addressId) {

@@ -10,9 +10,7 @@ class AuthProvider extends ChangeNotifier {
   bool isLogged = false;
   bool rememberMe = true;
 
-  AuthProvider() {
-    loadUserData();
-  }
+  
 
   // Load user data from SharedPreferences
   Future<void> loadUserData() async {
