@@ -71,15 +71,17 @@ This is a fully functional **E-Commerce Application** built using **Flutter** fo
 ### ☁️ Cloud Integration
 - **Cloudinary** for image storage.
 
-### 🌍 APIs
-- OpenWeather API integration for weather information (if applicable).
+## Usage
 
----
+1. Clone or download the project to your local machine.
+2. Open a terminal in the project's root directory.
+3. Run `flutter pub get` to ensure all dependencies are installed.
+4. Build the APK using `flutter build apk` or run on an emulator/device using `flutter run`.
 
-## Setup Instructions
+## Contributing
 
-### 🖥️ Backend Setup
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/jasimrazi/E-CommerceApp
-   cd E-CommerceApp/backend
+Contributions to this project are welcome. Feel free to open issues or pull requests to enhance the functionality, fix bugs, or improve the user experience.
+
+## License
+
+This project is open-source and available under the [MIT License](LICENSE). You are free to use and modify the code for your purposes.
